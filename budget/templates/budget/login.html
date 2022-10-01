@@ -11,7 +11,7 @@
         <div class="col-8 col-md-6 col-lg-6 bg-light" id="register-form">
             <!--Error or success message-->
             {% if message %}
-                <div>{{ message }}</div>
+                <div class="mb-1 text-danger">{{ message }}</div>
             {% endif %}
             <form action="{% url 'login' %}" method="post">
                 {% csrf_token %}
