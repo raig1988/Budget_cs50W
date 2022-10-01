@@ -16,9 +16,13 @@
     <!--Social media Icons-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--End social media icons-->
+    <!--Webicons-->
+    <script src="https://kit.fontawesome.com/43c3a3cc13.js" crossorigin="anonymous"></script>
+    <!--end webicons-->
     <title>{% block title %}{% endblock %}</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
   </head>
-  <body>
+  <body class="d-flex flex-column min-vh-100">
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg bg-light p-4 border-bottom border-dark">
         <div class="container-fluid">
@@ -32,15 +36,18 @@
                     <li class="nav-item">
                         <a class="nav-link active fs-2" aria-current="page" href="#">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link fs-2" href="#">Link 1</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fs-2" href="#">Link 2</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fs-2" href="#">Link 3</a>
-                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link fs-2" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link fs-2" href="{% url 'register' %}">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-2" href="{% url 'login' %}">Login</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         <!--End Navbar items-->
@@ -51,18 +58,19 @@
         <div class="row mx-5">
             <h2 id="section-title">{% block content %}{% endblock %}</h2>
         </div>
+    {% include 'budget/includes/messages.html' %}
     </div>
     <!--end Section title-->
       <!--end Navbar-->
     {% block body %}
     {% endblock %}
     <!--Start Footer-->
-    <div class="container-fluid">
+    <div class="container-fluid mt-auto">
         <div class="row px-4 pt-4 justify-content-center">
             <div class="col-5">
                 <!--Website, Facebook, Instagram-->
                 <ul class="list-group list-group-horizontal justify-content-center">
-                    <li class="list-group-item border border-0"><a href="#" class="fa fa-facebook"></a></li>
+                    <li class="list-group-item border border-0"><img class="fa-af123" src="{% static 'budget/images/af123_footer.png' %}" alt="footer-logo" href="www.aprendofinanzas123.com"></li>
                     <li class="list-group-item border border-0"><a href="#" class="fa fa-facebook"></a></li>
                     <li class="list-group-item border border-0"><a href="#" class="fa fa-instagram"></a></li>
                     <li class="list-group-item border border-0"><a href="#" class="fa fa-twitter"></a></li>
@@ -74,5 +82,10 @@
         </div>
     </div>
     <!--end Footer-->
+    <!--Bootstrap Javascript-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
+    <!--end Bootstrap JS-->
   </body>
 </html>
