@@ -59,6 +59,7 @@
         <!--End Navbar items-->
         </div>
     </nav>
+    <!--end Navbar-->
     <!--Section title-->
     <div class="container-fluid p-3">
         <div class="row mx-5">
@@ -67,9 +68,16 @@
     {% include 'budget/includes/messages.html' %}
     </div>
     <!--end Section title-->
-      <!--end Navbar-->
-    {% block body %}
-    {% endblock %}
+    <!--Start body-->
+    <div class="container-fluid">
+        <div class="row p-5 justify-content-center">
+            <div class="col-8 col-md-6 col-lg-6 bg-light">
+                {% block body %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    <!--end Body-->
     <!--Start Footer-->
     <div class="container-fluid mt-auto">
         <div class="row px-4 pt-4 justify-content-center">

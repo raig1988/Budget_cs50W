@@ -6,37 +6,33 @@
 {% block content %}Perfil {% if profile %} {{ profile.nickname }} {% else %} {{ user }} {% endif %}{% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-    <div class="row p-5 justify-content-center">
-        <div class="col-8 col-md-6 col-lg-6 bg-light">
-            <!--Error or success message-->
-            {% if message %}
-                <div class="mb-1 text-danger">{{ message }}</div>
-            {% endif %}
-            <!--Add nickname-->
-            <form action="{% url 'setnickname' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group mb-3">
-                    <label for="nickname" class="form-label">¿Cómo te gustaria ser llamado en la app?</label>
-                    <input id="nickname" class="form-control" type="text" name="nickname" placeholder="Nickname">
-                </div>
-                <input class="btn btn-primary" type="submit" value="Cambia tu nickname">
-            </form>
-            <!--End nickname-->
-            <!--Change password-->
-            <form action="{% url 'change_password' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group mb-3 mt-4">
-                    <label for="changepassword" class="form-label">Cambia tu contraseña</label>
-                    <input id="changepassword" class="form-control" type="password" name="changepassword" placeholder="Cambia tu contraseña">
-                </div>
-                <div class="form-group mb-3">
-                    <input class="form-control" type="password" name="confirmationpassword" placeholder="Confirma la nueva contraseña">
-                </div>
-                <input class="btn btn-primary" type="submit" value="Cambiar contraseña">
-            </form>
-            <!--End change password-->
+
+    <!--Error or success message-->
+    {% if message %}
+        <div class="mb-1 text-danger">{{ message }}</div>
+    {% endif %}
+    <!--Add nickname-->
+    <form action="{% url 'setnickname' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            <label for="nickname" class="form-label">¿Cómo te gustaria ser llamado en la app?</label>
+            <input id="nickname" class="form-control" type="text" name="nickname" placeholder="Nickname">
         </div>
-    </div>
-</div>
+        <input class="btn btn-primary" type="submit" value="Cambia tu nickname">
+    </form>
+    <!--End nickname-->
+    <!--Change password-->
+    <form action="{% url 'change_password' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group mb-3 mt-4">
+            <label for="changepassword" class="form-label">Cambia tu contraseña</label>
+            <input id="changepassword" class="form-control" type="password" name="changepassword" placeholder="Cambia tu contraseña">
+        </div>
+        <div class="form-group mb-3">
+            <input class="form-control" type="password" name="confirmationpassword" placeholder="Confirma la nueva contraseña">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Cambiar contraseña">
+    </form>
+    <!--End change password-->
+
 {% endblock %}

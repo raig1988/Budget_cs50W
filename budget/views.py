@@ -17,10 +17,8 @@ from django.core.mail import send_mail, BadHeaderError
 from django.db.models.query_utils import Q
 
 
-
 def index(request):
     return render(request, "budget/index.html")
-
 
 # Profile view
 @login_required
