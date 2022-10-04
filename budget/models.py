@@ -49,3 +49,13 @@ class Budget(models.Model):
 
     def __str__(self) -> str:
         return f"user: {self.user} - category: {self.category} - amount: {self.amount} - input date: {self.input_date}"
+
+    def serialize_budget(self):
+        return {
+            "id" : self.id,
+            "user_id" : self.user.id,
+            "user" : self.user.username,
+            "category" : self.category.category,
+            "amount" : self.amount,
+            "input_date" : self.input_date.strftime("%b %d %Y, %I:%M %p")
+        }

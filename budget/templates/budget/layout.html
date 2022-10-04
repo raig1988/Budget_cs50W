@@ -40,7 +40,13 @@
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link fs-2" href="{% url 'profile' %}">Profile</a>
+                            <a class="nav-link fs-2" href="{% url 'profile' %}">Perfil</a>
+                        </li>
+                        <li id ="main-summary-nav" class="nav-item">
+                            <a class="nav-link fs-2">Resumen</a>
+                        </li>
+                        <li id ="transacciones-nav" class="nav-item">
+                            <a class="nav-link fs-2">Transacciones</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link fs-2" href="{% url 'logout' %}">Logout</a>

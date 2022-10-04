@@ -32,6 +32,7 @@ def summary_month(request, date):
     user = request.user
     array = []
     category_dict = {}
+    budget_array = []
     category = Transactions.objects.filter(user=user, date__month=month, date__year=year).values('category').annotate(categ_sum=Sum('amount'))
     sum_month = Transactions.objects.filter(user_id=user, date__month=month, date__year=year).aggregate(total_sum=Sum('amount'))
     categories = Categories.objects.all()
@@ -39,9 +40,17 @@ def summary_month(request, date):
         category_dict[item.id] = item.category
     for item in category:
         array.append(item)
+    user_budget = Budget.objects.filter(user=user).values("category", "amount")
+    for item in user_budget:
+        budget_array.append(item)
+    sum_budget = Budget.objects.filter(user=user).aggregate(total_budget_sum=Sum('amount'))
     return JsonResponse({
-        "sum_categories" : array,
+        "summary" : {
+            "sum_cat" : array,
+            "budget" : budget_array
+            },
         "total_month" : sum_month["total_sum"],
+        "total_budget_month" : sum_budget["total_budget_sum"],
         "categories" : category_dict
     })
 
