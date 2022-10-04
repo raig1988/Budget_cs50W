@@ -6,6 +6,41 @@
 {% block body %}
 
     <section id="intro"></section>
+    <!--Show transactions per month-->
+    <section id="transactions">
+        <!--Form to input month and year-->
+        <div id="error-selection" class="alert alert-danger" role="alert"></div>
+        <h3 class="mb-3">Selecciona mes y año</h3>
+        <form class="row mb-3">
+            <div class="col-auto">
+                <select class="form-select" onchange="load_transactions(); summary_month()" name="month" id="select-transaction-month">
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <input class="form-control" onchange="load_transactions(); summary_month()" id="select-transaction-year" name="year" type="number" min="1900" max="2099" step="1" value="2022" />
+            </div>
+            <div class="col-auto">
+                <input id="toggle-transacciones-resumen" class="form-control" type="button" value="Resumen mensual"/>
+            </div>
+        </form>
+        <!--end form to input month and year-->
+        <div id="transaction-month"></div>
+        <table id="table-summary-month-transactions" class="table table-bordered"></table>
+        <table id="table-transactions" class="table table-bordered"></table>
+    </section>
+    <!--End show transactions per month-->
 
 
 {% endblock %}

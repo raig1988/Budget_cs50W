@@ -15,10 +15,47 @@ from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.core.mail import send_mail, BadHeaderError
 from django.db.models.query_utils import Q
+# manage range of dates
+import datetime
+# Aggregation functions
+from django.db.models import Sum
+
 
 
 def index(request):
     return render(request, "budget/index.html")
+
+# Get summary amount per category and per month and consolidate total value
+def summary_month(request, date):
+    month = int(request.GET["month"])
+    year = int(request.GET["year"])
+    user = request.user
+    array = []
+    category_dict = {}
+    category = Transactions.objects.filter(user=user, date__month=month, date__year=year).values('category').annotate(categ_sum=Sum('amount'))
+    sum_month = Transactions.objects.filter(user_id=user, date__month=month, date__year=year).aggregate(total_sum=Sum('amount'))
+    categories = Categories.objects.all()
+    for item in categories:
+        category_dict[item.id] = item.category
+    for item in category:
+        array.append(item)
+    return JsonResponse({
+        "sum_categories" : array,
+        "total_month" : sum_month["total_sum"],
+        "categories" : category_dict
+    })
+
+# load all transactions per user per month and year
+def load_transactions(request, date):
+    month = int(request.GET["month"])
+    year = int(request.GET["year"])
+    # pass range as year, month and day
+    selected_month = Transactions.objects.filter(user=request.user, date__month=month, date__year=year)
+    month_transaction = Transactions.objects.filter(user=request.user).first()
+    return JsonResponse({
+        "date_transaction" : month_transaction.date,
+        "transaction" : [transaction.serialize_transaction() for transaction in selected_month]
+        })
 
 # Profile view
 @login_required

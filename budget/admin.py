@@ -13,3 +13,6 @@ class CustomizedUserAdmin(UserAdmin):
 
 # Register your models here.
 admin.site.register(User, CustomizedUserAdmin)
+admin.site.register(Categories)
+admin.site.register(Budget)
+admin.site.register(Transactions)

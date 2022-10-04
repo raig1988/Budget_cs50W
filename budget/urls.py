@@ -9,5 +9,7 @@ urlpatterns = [
     path("password_reset", views.password_reset_request, name="password_reset"),
     path("profile", views.profile, name="profile"),
     path("change_password", views.change_password, name="change_password"),
-    path("setnickname", views.setnickname, name="setnickname")
+    path("setnickname", views.setnickname, name="setnickname"),
+    path("load_transactions/<str:date>", views.load_transactions, name="load_transactions"),
+    path("summary_month/<str:date>", views.summary_month, name="summary_month")
 ]

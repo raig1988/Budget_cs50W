@@ -151,3 +151,6 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+# Set Date format for Forms
+#DATE_INPUT_FORMATS = ['%d-%m-%Y']
