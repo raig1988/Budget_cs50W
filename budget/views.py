@@ -20,10 +20,42 @@ import datetime
 # Aggregation functions
 from django.db.models import Sum
 
-
-
 def index(request):
     return render(request, "budget/index.html")
+
+def general_summary(request):
+    year = 2022
+    january = list(Transactions.objects.filter(user=request.user, date__month=1, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    february = list(Transactions.objects.filter(user=request.user, date__month=2, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    march = list(Transactions.objects.filter(user=request.user, date__month=3, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    april = list(Transactions.objects.filter(user=request.user, date__month=4, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    may = list(Transactions.objects.filter(user=request.user, date__month=5, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    june = list(Transactions.objects.filter(user=request.user, date__month=6, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    july = list(Transactions.objects.filter(user=request.user, date__month=7, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    august = list(Transactions.objects.filter(user=request.user, date__month=8, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    september = list(Transactions.objects.filter(user=request.user, date__month=9, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    october = list(Transactions.objects.filter(user=request.user, date__month=10, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    november = list(Transactions.objects.filter(user=request.user, date__month=11, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    december = list(Transactions.objects.filter(user=request.user, date__month=12, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+    category_dict = {}
+    categories = Categories.objects.all()
+    for item in categories:
+        category_dict[item.id] = item.category
+    return JsonResponse({
+        "categories" : category_dict,
+        "january" : january,
+        "february" : february,
+        "march" : march,
+        "april" : april,
+        "may" : may,
+        "june" : june,
+        "july" : july,
+        "august" : august,
+        "september" : september,
+        "october" : october,
+        "november" : november,
+        "december" : december
+    })
 
 # Get summary amount per category and per month and consolidate total value
 def summary_month(request, date):
@@ -44,6 +76,7 @@ def summary_month(request, date):
     for item in user_budget:
         budget_array.append(item)
     sum_budget = Budget.objects.filter(user=user).aggregate(total_budget_sum=Sum('amount'))
+    print(array, budget_array)
     return JsonResponse({
         "summary" : {
             "sum_cat" : array,

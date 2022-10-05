@@ -6,43 +6,53 @@
 {% block body %}
 
     <section id="intro"></section>
+
     <!--Shows main summary transactions per year-->
-    <section id="main-summary"></section>
-    <!--end Main summary transactions per year-->
-    <!--Show transactions per month-->
-    <section id="transactions">
-        <!--Form to input month and year-->
-        <div id="error-selection" class="alert alert-danger" role="alert"></div>
-        <h3 class="mb-3">Selecciona mes y año</h3>
-        <form class="row mb-3">
-            <div class="col-auto">
-                <select class="form-select" name="month" id="select-transaction-month">
-                    <option value="1">Enero</option>
-                    <option value="2">Febrero</option>
-                    <option value="3">Marzo</option>
-                    <option value="4">Abril</option>
-                    <option value="5">Mayo</option>
-                    <option value="6">Junio</option>
-                    <option value="7">Julio</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Septiembre</option>
-                    <option value="10">Octubre</option>
-                    <option value="11">Noviembre</option>
-                    <option value="12">Diciembre</option>
-                </select>
-            </div>
-            <div class="col-auto">
-                <input class="form-control" id="select-transaction-year" name="year" type="number" min="1900" max="2099" step="1" value="2022" />
-            </div>
-            <div class="col-auto">
-                <input id="toggle-transacciones-resumen" class="form-control" type="button" value="Resumen mensual"/>
-            </div>
-        </form>
-        <!--end form to input month and year-->
-        <div id="transaction-month"></div>
-        <table id="table-summary-month-transactions" class="table table-bordered"></table>
-        <table id="table-transactions" class="table table-bordered"></table>
+    <section class="row justify-content-center" id="main-summary">
+        <div class="table-responsive col-8">
+            <table id="main-summary-table" class="table table-bordered"></table> 
+        </div>
     </section>
+    <!--end Main summary transactions per year-->
+
+    <!--Show transactions per month-->
+    <div class="row p-5 justify-content-center">
+        <div class="col-8 col-md-6 col-lg-6 bg-light">
+            <section id="transactions">
+                <!--Form to input month and year-->
+                <div id="error-selection" class="alert alert-danger" role="alert"></div>
+                <h3 class="mb-3">Selecciona mes y año</h3>
+                <form class="row mb-3">
+                    <div class="col-auto">
+                        <select class="form-select" name="month" id="select-transaction-month">
+                            <option value="1">Enero</option>
+                            <option value="2">Febrero</option>
+                            <option value="3">Marzo</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Mayo</option>
+                            <option value="6">Junio</option>
+                            <option value="7">Julio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <input class="form-control" id="select-transaction-year" name="year" type="number" min="1900" max="2099" step="1" value="2022" />
+                    </div>
+                    <div class="col-auto">
+                        <input id="toggle-transacciones-resumen" class="form-control" type="button" value="Resumen mensual"/>
+                    </div>
+                </form>
+                <!--end form to input month and year-->
+                <div id="transaction-month"></div>
+                <table id="table-summary-month-transactions" class="table table-bordered"></table>
+                <table id="table-transactions" class="table table-bordered"></table>
+            </section>
+        </div>
+    </div>
     <!--End show transactions per month-->
 
 

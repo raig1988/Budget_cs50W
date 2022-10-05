@@ -11,5 +11,6 @@ urlpatterns = [
     path("change_password", views.change_password, name="change_password"),
     path("setnickname", views.setnickname, name="setnickname"),
     path("load_transactions/<str:date>", views.load_transactions, name="load_transactions"),
-    path("summary_month/<str:date>", views.summary_month, name="summary_month")
+    path("summary_month/<str:date>", views.summary_month, name="summary_month"), 
+    path("general_summary", views.general_summary, name="general_summary")
 ]
