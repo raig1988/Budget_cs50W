@@ -4,21 +4,88 @@
 {% block title %}Finanzas personales{% endblock %}
 
 {% block body %}
+    <!--Section intro-->
+    <section id="intro">
+        <div class="row p-5 justify-content-center">
+            <div class="col-8 col-md-6 col-lg-12 bg-light">
+        <h3>Bienvenidos a la aplicacion de control de presupuesto</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eu semper diam, eget bibendum mi. Etiam venenatis lectus viverra, congue magna nec, euismod turpis. Quisque hendrerit risus pharetra elit scelerisque, nec molestie nulla facilisis. Phasellus a quam convallis, consectetur elit a, ornare orci. Curabitur tellus odio, egestas vitae dolor et, suscipit venenatis odio. Vivamus enim magna, molestie sit amet ultrices non, ultrices id magna. Nunc nunc ante, ultrices eget diam nec, faucibus iaculis augue. Nunc ornare id elit id lacinia. Sed semper tortor sed leo volutpat iaculis sit amet ac felis. Suspendisse consectetur sed lacus ut eleifend.
 
-    <section id="intro"></section>
-
-    <!--Shows main summary transactions per year-->
-    <section class="row justify-content-center" id="main-summary">
-        <div class="table-responsive col-8">
-            <table id="main-summary-table" class="table table-bordered"></table> 
+            Pellentesque eget lorem et quam imperdiet aliquet. Nam at quam ac velit imperdiet congue. Nullam ante turpis, tincidunt ut nisi ut, sodales viverra leo. In vel ipsum orci. Sed consectetur tempor mi sed viverra. Aenean velit tellus, lobortis vitae quam nec, luctus vulputate justo. Mauris pulvinar tellus ac mi dignissim maximus. Donec sodales sem ut molestie efficitur. Nulla mi eros, pharetra eget ipsum eu, volutpat pretium nulla. In hac habitasse platea dictumst. Nam a luctus sem. Nam sed pellentesque tellus. Aenean pellentesque mi ante, sed rutrum erat commodo vel. Maecenas ut risus egestas, malesuada erat sed, porta arcu.
+            
+            Aenean sodales tempus orci et hendrerit. Etiam maximus est et leo ultrices, id hendrerit massa malesuada. Donec tincidunt maximus massa. Duis volutpat magna vel nunc luctus auctor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vivamus accumsan ullamcorper dignissim. Morbi rutrum nec ex luctus pretium. Nulla vehicula ac quam at laoreet. Pellentesque risus justo, cursus a posuere sed, euismod sit amet est. Sed consequat aliquet vehicula. Curabitur gravida justo id magna semper, quis porttitor justo euismod. Integer ut scelerisque felis. Nunc non aliquet sapien. Morbi ut mattis erat, vitae suscipit lectus.
+            
+            Fusce efficitur risus ut odio interdum viverra. Vivamus vel elit eget ex scelerisque consequat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec euismod pulvinar pulvinar. Sed vehicula tincidunt purus vitae molestie. Donec laoreet non dolor vitae ullamcorper. Praesent tempor, ligula eu volutpat tincidunt, sapien mi consequat magna, quis vestibulum metus odio id mauris. Donec eu iaculis odio, vel tempus metus. Mauris varius ut tellus nec eleifend. Etiam varius tincidunt maximus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam a dignissim ligula, vitae elementum libero.
+            
+            Pellentesque vel laoreet est. Sed maximus sapien non turpis tempus vestibulum. Vivamus vel sapien orci. Cras pharetra eu tellus vel varius. Duis sodales eros in sapien pellentesque, a tempor ligula porttitor. Nulla pharetra ex lorem, non finibus nulla gravida non. Nam in fringilla tortor, a blandit metus. Vivamus nibh velit, viverra non dignissim eu, tincidunt id eros.</p>
+            </div>
         </div>
+    </section>
+
+    <!--Section Profile-->
+    <section id="profile">
+        <div class="row mx-5">
+            <h2 id="section-title">Perfil {% if profile %} {{ profile.nickname }} {% else %} {{ user }} {% endif %}</h2>
+        </div>
+        <div class="row p-5 justify-content-center">
+            <div class="col-8 col-md-6 col-lg-6 bg-light">
+            <!--Error or success message-->
+            {% if message %}
+                <div class="mb-1 text-danger">{{ message }}</div>
+            {% endif %}
+            <!--Add nickname-->
+            <form action="{% url 'setnickname' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    <label for="nickname" class="form-label">¿Cómo te gustaria ser llamado en la app?</label>
+                    <input id="nickname" class="form-control" type="text" name="nickname" placeholder="Nickname">
+                </div>
+                <input class="btn btn-primary" type="submit" value="Cambia tu nickname">
+            </form>
+            <!--End nickname-->
+            <!--Change password-->
+            <form action="{% url 'change_password' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group mb-3 mt-4">
+                    <label for="changepassword" class="form-label">Cambia tu contraseña</label>
+                    <input id="changepassword" class="form-control" type="password" name="changepassword" placeholder="Cambia tu contraseña">
+                </div>
+                <div class="form-group mb-3">
+                    <input class="form-control" type="password" name="confirmationpassword" placeholder="Confirma la nueva contraseña">
+                </div>
+                <input class="btn btn-primary" type="submit" value="Cambiar contraseña">
+            </form>
+            <!--End change password-->
+            </div>
+        </div>
+    </section>
+    <!--Shows main summary transactions per year-->
+    <section id="main-summary">
+            <!--Form to enter year of transactions-->
+            <div id="error-selection-summary" class="alert alert-danger" role="alert"></div>
+            <div class="row justify-content-center mb-4 text-center">  
+                <div class="col-auto">
+                    <h3 class="form-label">Selecciona año</h3>
+                </div>
+                <div class="col-auto">
+                    <input class="form-control" id="select-summary-year" name="year" type="number" min="1900" max="2099" step="1" value="2022" />
+                </div>
+            </div>
+            <!--Table with data-->
+            <div class="row justify-content-center mb-4">
+                <div class="table-responsive col-8">
+                    <table id="main-summary-table" class="table table-bordered border-dark text-start"></table> 
+                </div>
+            </div>
+        <!--Charts-->
+        <div id="charts"></div>
     </section>
     <!--end Main summary transactions per year-->
 
     <!--Show transactions per month-->
-    <div class="row p-5 justify-content-center">
-        <div class="col-8 col-md-6 col-lg-6 bg-light">
-            <section id="transactions">
+    <section id="transactions">
+        <div class="row p-5 justify-content-center">
+            <div class="col-8 col-md-6 col-lg-6 bg-light">
                 <!--Form to input month and year-->
                 <div id="error-selection" class="alert alert-danger" role="alert"></div>
                 <h3 class="mb-3">Selecciona mes y año</h3>
@@ -48,11 +115,13 @@
                 </form>
                 <!--end form to input month and year-->
                 <div id="transaction-month"></div>
+                <!--transactions per month by category-->
                 <table id="table-summary-month-transactions" class="table table-bordered"></table>
+                <!--all transactions per day by month-->
                 <table id="table-transactions" class="table table-bordered"></table>
-            </section>
+            </div>
         </div>
-    </div>
+    </section>
     <!--End show transactions per month-->
 
 

@@ -18,14 +18,26 @@ from django.db.models.query_utils import Q
 # manage range of dates
 import datetime
 # Aggregation functions
-from django.db.models import Sum
+from django.db.models import Sum, FloatField
+from django.db.models.functions import Round
 
 def index(request):
+    if request.user.is_anonymous:
+        return render(request, "budget/index.html")
+    elif Profile.objects.filter(user=request.user).exists():
+        return render(request, "budget/index.html", {"profile" : Profile.objects.get(user=request.user)})
     return render(request, "budget/index.html")
 
-def general_summary(request):
-    year = 2022
-    january = list(Transactions.objects.filter(user=request.user, date__month=1, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
+def general_summary(request, date):
+    year = int(request.GET['year'])
+    print(year)
+    sum_category = list(Transactions.objects.filter(user=request.user, date__year=year).values('category').annotate(categ_sum=Round(Sum('amount'),2)))
+    category_dict = {}
+    categories = Categories.objects.all()
+    for item in categories:
+        category_dict[item.id] = item.category
+    monthly = list(Transactions.objects.filter(user=request.user, date__year=year).values('date__month').annotate(categ_sum=Round(Sum('amount'),2)))
+    january = list(Transactions.objects.filter(user=request.user, date__month=1, date__year=year).values('category').annotate(categ_sum=Round(Sum('amount'),2)))
     february = list(Transactions.objects.filter(user=request.user, date__month=2, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
     march = list(Transactions.objects.filter(user=request.user, date__month=3, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
     april = list(Transactions.objects.filter(user=request.user, date__month=4, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
@@ -37,12 +49,7 @@ def general_summary(request):
     october = list(Transactions.objects.filter(user=request.user, date__month=10, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
     november = list(Transactions.objects.filter(user=request.user, date__month=11, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
     december = list(Transactions.objects.filter(user=request.user, date__month=12, date__year=year).values('category').annotate(categ_sum=Sum('amount')))
-    category_dict = {}
-    categories = Categories.objects.all()
-    for item in categories:
-        category_dict[item.id] = item.category
     return JsonResponse({
-        "categories" : category_dict,
         "january" : january,
         "february" : february,
         "march" : march,
@@ -54,7 +61,10 @@ def general_summary(request):
         "september" : september,
         "october" : october,
         "november" : november,
-        "december" : december
+        "december" : december,
+        "total_monthly": monthly,
+        "category_sum" : sum_category,
+        "categories" : category_dict
     })
 
 # Get summary amount per category and per month and consolidate total value
@@ -65,8 +75,8 @@ def summary_month(request, date):
     array = []
     category_dict = {}
     budget_array = []
-    category = Transactions.objects.filter(user=user, date__month=month, date__year=year).values('category').annotate(categ_sum=Sum('amount'))
-    sum_month = Transactions.objects.filter(user_id=user, date__month=month, date__year=year).aggregate(total_sum=Sum('amount'))
+    category = Transactions.objects.filter(user=user, date__month=month, date__year=year).values('category').annotate(categ_sum=Round(Sum('amount', output_field=FloatField()), 2))
+    sum_month = Transactions.objects.filter(user_id=user, date__month=month, date__year=year).aggregate(total_sum=Round(Sum('amount'),2))
     categories = Categories.objects.all()
     for item in categories:
         category_dict[item.id] = item.category
@@ -75,8 +85,7 @@ def summary_month(request, date):
     user_budget = Budget.objects.filter(user=user).values("category", "amount")
     for item in user_budget:
         budget_array.append(item)
-    sum_budget = Budget.objects.filter(user=user).aggregate(total_budget_sum=Sum('amount'))
-    print(array, budget_array)
+    sum_budget = Budget.objects.filter(user=user).aggregate(total_budget_sum=Round(Sum('amount'),2))
     return JsonResponse({
         "summary" : {
             "sum_cat" : array,
@@ -90,21 +99,14 @@ def summary_month(request, date):
 # load all transactions per user per month and year
 def load_transactions(request, date):
     month = int(request.GET["month"])
+    print(month)
     year = int(request.GET["year"])
     # pass range as year, month and day
     selected_month = Transactions.objects.filter(user=request.user, date__month=month, date__year=year)
-    month_transaction = Transactions.objects.filter(user=request.user).first()
+    print(selected_month)
     return JsonResponse({
-        "date_transaction" : month_transaction.date,
         "transaction" : [transaction.serialize_transaction() for transaction in selected_month]
         })
-
-# Profile view
-@login_required
-def profile(request):
-    if Profile.objects.filter(user=request.user).exists():
-        return render(request, "budget/profile.html", {"profile" : Profile.objects.get(user=request.user)})
-    return render(request, "budget/profile.html")
 
 def setnickname(request):
     if request.method == "POST":
@@ -139,8 +141,6 @@ def change_password(request):
         messages.success(request, 'Tu contraseña ha sido cambiada con exito.')
         login(request, user)
         return HttpResponseRedirect(reverse("profile"))
-
-#end profile
 
 # user register, login, logout, change password
 
