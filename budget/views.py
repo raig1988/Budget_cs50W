@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
@@ -15,11 +15,12 @@ from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.core.mail import send_mail, BadHeaderError
 from django.db.models.query_utils import Q
-# manage range of dates
-import datetime
 # Aggregation functions
 from django.db.models import Sum, FloatField
 from django.db.models.functions import Round
+# Csrf exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+import json
 
 def index(request):
     if request.user.is_anonymous:
@@ -27,6 +28,26 @@ def index(request):
     elif Profile.objects.filter(user=request.user).exists():
         return render(request, "budget/index.html", {"profile" : Profile.objects.get(user=request.user)})
     return render(request, "budget/index.html")
+
+def delete_transaction(request, id):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        transaction_id = data.get("transaction_id")
+        selected_transaction = Transactions.objects.get(id=transaction_id, user=request.user)
+        # delete transaction
+        selected_transaction.delete()
+        return JsonResponse({"data": data})
+
+def new_transaction(request):
+    if request.method == "POST":
+        # recolect data from form
+        data = json.loads(request.body)
+        print(data)
+        # add data for date, category, transaction and amount
+        newTransaction = Transactions(user=request.user, date=data["date"], category_id=int(data["category"]), description=data["description"], amount=data["amount"])
+        newTransaction.save()
+        return JsonResponse({"message": "Post created successfully."}, status=200)
+    return HttpResponseNotFound('404')
 
 def general_summary(request, date):
     year = int(request.GET['year'])
@@ -99,11 +120,9 @@ def summary_month(request, date):
 # load all transactions per user per month and year
 def load_transactions(request, date):
     month = int(request.GET["month"])
-    print(month)
     year = int(request.GET["year"])
     # pass range as year, month and day
     selected_month = Transactions.objects.filter(user=request.user, date__month=month, date__year=year)
-    print(selected_month)
     return JsonResponse({
         "transaction" : [transaction.serialize_transaction() for transaction in selected_month]
         })
@@ -113,17 +132,17 @@ def setnickname(request):
         nickname = request.POST["nickname"]
         if not nickname:
             messages.error(request, "El nickname no puede estar vacio.")
-            return redirect("profile")
+            return redirect("index")
         if Profile.objects.filter(user=request.user).exists():
             nickname_update = Profile.objects.get(user=request.user)
             nickname_update.nickname = nickname
             nickname_update.save()
             messages.success(request, 'Tu nickname ha sido actualizado.')
-            return HttpResponseRedirect(reverse("profile"))
+            return HttpResponseRedirect(reverse("index"))
         nickname_create = Profile(user=request.user, nickname=nickname)
         nickname_create.save()
         messages.success(request, 'Tu nickname ha sido creado.')
-        return HttpResponseRedirect(reverse("profile"))
+        return HttpResponseRedirect(reverse("index"))
 
 def change_password(request):
     if request.method == "POST":
@@ -131,16 +150,16 @@ def change_password(request):
         confirmation_password = request.POST["confirmationpassword"]
         if not change_password:
             messages.error(request, "La contraseña no puede estar vacia.")
-            return redirect("profile")
+            return redirect("index")
         if change_password != confirmation_password:
             messages.error(request, "Las contraseñas deben coincidir.")
-            return redirect("profile")
+            return redirect("index")
         user = User.objects.get(id=request.user.id)
         user.set_password(change_password)
         user.save()
         messages.success(request, 'Tu contraseña ha sido cambiada con exito.')
         login(request, user)
-        return HttpResponseRedirect(reverse("profile"))
+        return HttpResponseRedirect(reverse("index"))
 
 # user register, login, logout, change password
 

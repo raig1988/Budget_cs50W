@@ -23,7 +23,7 @@ class Transactions(models.Model):
     date = models.DateField()
     description = models.CharField(max_length=200)
     category = models.ForeignKey(Categories, on_delete=models.PROTECT, related_name="categories")
-    amount = models.DecimalField(max_digits=19, decimal_places=2)
+    amount = models.FloatField()
     input_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
@@ -44,7 +44,7 @@ class Transactions(models.Model):
 class Budget(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='budget_user')
     category = models.ForeignKey(Categories, on_delete=models.CASCADE, related_name='budget_category')
-    amount = models.DecimalField(max_digits=19, decimal_places=2)
+    amount = models.FloatField()
     input_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

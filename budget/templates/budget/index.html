@@ -89,7 +89,7 @@
                 <!--Form to input month and year-->
                 <div id="error-selection" class="alert alert-danger" role="alert"></div>
                 <h3 class="mb-3">Selecciona mes y año</h3>
-                <form class="row mb-3">
+                <div class="row mb-3">
                     <div class="col-auto">
                         <select class="form-select" name="month" id="select-transaction-month">
                             <option value="1">Enero</option>
@@ -112,9 +112,48 @@
                     <div class="col-auto">
                         <input id="toggle-transacciones-resumen" class="form-control" type="button" value="Resumen mensual"/>
                     </div>
-                </form>
-                <!--end form to input month and year-->
+                </div>
+                <!--month and year selected title-->
                 <div id="transaction-month"></div>
+                <!--Form to add new transactions-->
+                <form class="row mt-2" id="newTransaction">
+                    {% csrf_token %}
+                    <!--Add a form below month and year title where you can set all info related to transaction
+                    date, category, description, amount-->
+                    <div class="row">
+                        <div class="col-auto">
+                            <label for="transaction-date" class="form-label">Fecha</label>
+                            <input class="form-control" type="date" name="transaction-date" id="transaction-date">
+                        </div>
+                        <div class="col-auto">
+                            <label for="transaction-category" class="form-label">Categoria</label>
+                            <select class="form-select" name="transaction-category" id="transaction-category">
+                                <option value="2">Apps</option>
+                                <option value="3">Servicios</option>
+                                <option value="4">Otros</option>
+                                <option value="5">Alimentos</option>
+                                <option value="6">Suplementos</option>
+                                <option value="7">Cuidado personal</option>
+                                <option value="8">Seguros</option>
+                                <option value="9">Limpieza</option>
+                                <option value="10">Alquiler</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto">
+                            <label for="transaction-description" class="form-label">Descripción</label>
+                            <input class="form-control" type="text" name="transaction-description" id="transaction-description">
+                        </div>
+                        <div class="col-auto">
+                            <label for="transaction-amount" class="form-label">Monto</label>
+                            <input class="form-control" type="number" step="0.01" name="transaction-amount" id="transaction-amount">
+                        </div>
+                        <div class="col-auto">
+                            <button class="form-control" type="submit">Enviar</button>
+                        </div>
+                    </div>
+                </form>
                 <!--transactions per month by category-->
                 <table id="table-summary-month-transactions" class="table table-bordered"></table>
                 <!--all transactions per day by month-->
