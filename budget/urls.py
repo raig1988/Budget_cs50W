@@ -13,5 +13,6 @@ urlpatterns = [
     path("summary_month/<str:date>", views.summary_month, name="summary_month"),
     path("general_summary/<str:date>", views.general_summary, name="general_summary"),
     path("new_transaction", views.new_transaction, name="new_transaction"),
-    path("delete_transaction/<int:id>", views.delete_transaction, name="delete_transaction")
+    path("delete_transaction/<int:id>", views.delete_transaction, name="delete_transaction"),
+    path("update_transaction/<int:id>", views.update_transaction, name="update_transaction")
 ]

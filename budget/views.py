@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
@@ -29,6 +30,20 @@ def index(request):
         return render(request, "budget/index.html", {"profile" : Profile.objects.get(user=request.user)})
     return render(request, "budget/index.html")
 
+def update_transaction(request, id):
+    selected_transaction = Transactions.objects.filter(user=request.user, id=id)
+    template_transaction = Transactions.objects.get(user=request.user, id=id)
+    if request.method == "POST":
+        # get data for date, category. description, amount
+        data = json.loads(request.body)
+        date = data.get("date")
+        category = data.get("category")
+        description = data.get('description')
+        amount = data.get('amount')
+        selected_transaction.update(date=date, category=category, description=description, amount=amount, input_date=datetime.now())
+        return JsonResponse({"message": "Transaction update successfully."})
+    return render(request, "budget/update_transaction.html", { "transaction" : template_transaction })
+
 def delete_transaction(request, id):
     if request.method == "PUT":
         data = json.loads(request.body)
@@ -36,7 +51,7 @@ def delete_transaction(request, id):
         selected_transaction = Transactions.objects.get(id=transaction_id, user=request.user)
         # delete transaction
         selected_transaction.delete()
-        return JsonResponse({"data": data})
+        return JsonResponse({"data": data, "transactionMonth": selected_transaction.date.month , "transactionYear": selected_transaction.date.year})
 
 def new_transaction(request):
     if request.method == "POST":
@@ -46,7 +61,8 @@ def new_transaction(request):
         # add data for date, category, transaction and amount
         newTransaction = Transactions(user=request.user, date=data["date"], category_id=int(data["category"]), description=data["description"], amount=data["amount"])
         newTransaction.save()
-        return JsonResponse({"message": "Post created successfully."}, status=200)
+        dataTransaction = Transactions.objects.get(id=newTransaction.id)
+        return JsonResponse({"message": "Post created successfully.", "dataTransactionMonth": dataTransaction.date.month, "dataTransactionYear": dataTransaction.date.year}, status=200)
     return HttpResponseNotFound('404')
 
 def general_summary(request, date):

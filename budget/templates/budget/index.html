@@ -163,5 +163,44 @@
     </section>
     <!--End show transactions per month-->
 
+    <!--Create edit section
+    <section id="edit_post">
+        <form class="row mt-2" id="update_transaction">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-auto">
+                    <label for="update-date" class="form-label">Fecha</label>
+                    <input class="form-control" type="date" name="update-date" id="update-date">
+                </div>
+                <div class="col-auto">
+                    <label for="update-category" class="form-label">Categoria</label>
+                    <select class="form-select" name="update-category" id="update-category">
+                        <option value="2">Apps</option>
+                        <option value="3">Servicios</option>
+                        <option value="4">Otros</option>
+                        <option value="5">Alimentos</option>
+                        <option value="6">Suplementos</option>
+                        <option value="7">Cuidado personal</option>
+                        <option value="8">Seguros</option>
+                        <option value="9">Limpieza</option>
+                        <option value="10">Alquiler</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <label for="update-description" class="form-label">Descripción</label>
+                    <input class="form-control" type="text" name="update-description" id="update-description">
+                </div>
+                <div class="col-auto">
+                    <label for="update-amount" class="form-label">Monto</label>
+                    <input class="form-control" type="number" step="0.01" name="update-amount" id="update-amount">
+                </div>
+                <div class="col-auto">
+                    <button class="form-control" type="submit">Actualizar</button>
+                </div>
+            </div>
+        </form>
+    </section> -->
 
 {% endblock %}
