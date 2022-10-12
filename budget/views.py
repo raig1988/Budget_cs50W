@@ -31,9 +31,10 @@ def index(request):
     return render(request, "budget/index.html")
 
 def update_transaction(request, id):
-    selected_transaction = Transactions.objects.filter(user=request.user, id=id)
-    template_transaction = Transactions.objects.get(user=request.user, id=id)
-    if request.method == "POST":
+    transaction_id = id
+    selected_transaction = Transactions.objects.filter(user=request.user, id=transaction_id)
+    template_transaction = Transactions.objects.get(user=request.user, id=transaction_id)
+    if request.method == "PUT":
         # get data for date, category. description, amount
         data = json.loads(request.body)
         date = data.get("date")
@@ -41,8 +42,14 @@ def update_transaction(request, id):
         description = data.get('description')
         amount = data.get('amount')
         selected_transaction.update(date=date, category=category, description=description, amount=amount, input_date=datetime.now())
-        return JsonResponse({"message": "Transaction update successfully."})
-    return render(request, "budget/update_transaction.html", { "transaction" : template_transaction })
+        result_transaction = Transactions.objects.get(user=request.user, id=transaction_id)
+        return JsonResponse({"message": "Transaction update successfully.", "transaction": result_transaction.serialize_transaction() ,"day": result_transaction.date.month})
+    return JsonResponse({"transaction": template_transaction.serialize_transaction(), 
+        "category": template_transaction.category.id, 
+        "date": template_transaction.date.strftime("%Y-%m-%d"),
+        "month":template_transaction.date.month,
+        "year": template_transaction.date.year 
+        })
 
 def delete_transaction(request, id):
     if request.method == "PUT":

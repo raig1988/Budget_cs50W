@@ -27,7 +27,7 @@ class Transactions(models.Model):
     input_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"user: {self.user} - date: {self.date} - category: {self.category} - description: {self.description} - amount: {self.amount} - input date: {self.input_date}"
+        return f"id: {self.id} - user: {self.user} - date: {self.date} - category: {self.category} - description: {self.description} - amount: {self.amount} - input date: {self.input_date}"
 
     def serialize_transaction(self):
         return {

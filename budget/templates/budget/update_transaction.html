@@ -1,0 +1,122 @@
+{% load static %}
+
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+        <link href="{% static '/budget/styles.css' %}" rel="stylesheet">
+        <!--Google Fonts-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+        <!--End Google Fonts-->
+        <!--Social media Icons-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!--End social media icons-->
+        <!--Webicons-->
+        <script src="https://kit.fontawesome.com/43c3a3cc13.js" crossorigin="anonymous"></script>
+        <!--end webicons-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+        <!--JsCharting-->
+        <script src="https://code.jscharting.com/latest/jscharting.js"></script>
+        <!--ChartJS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!--ChartJS plugin datalabels-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!--Bootstrap Javascript-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
+        <!--end Bootstrap JS-->
+        <title>Editar transaccion</title>
+    </head>
+    
+    <body class="d-flex flex-column min-vh-100">
+        <div class="container-fluid p-3">
+            {% include 'budget/includes/messages.html' %}
+        </div>
+        <!--Create edit section-->
+        <div class="container-fluid">
+            <section id="edit_post">
+                <h2>Actualizar transacción</h2>
+                <h3>Información previa esta precargada</h3>
+                {% if transaction %}
+                <form class="row mt-2" id="update_transaction">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-auto">
+                            <label for="update-date" class="form-label">Fecha</label>
+                            <input class="form-control" type="date" name="update-date" id="update-date" value="{{ transaction.date | date:'Y-m-d' }}">
+                        </div>
+                        <div class="col-auto">
+                            <label for="update-category" class="form-label">Categoria</label>
+                            <select class="form-select" name="update-category" id="update-category" selected="{{ transaction.category.category }}">
+                                {% if transaction.category.id == 2 %} <option selected value="2">Apps</option> {% else %} <option value="2">Apps</option> {% endif %}
+                                {% if transaction.category.id == 3 %} <option selected value="3">Servicios</option> {% else %} <option value="3">Servicios</option> {% endif %}
+                                {% if transaction.category.id == 4 %} <option selected value="4">Otros</option> {% else %} <option value="4">Otros</option> {% endif %}
+                                {% if transaction.category.id == 5 %} <option selected value="5">Alimentos</option> {% else %} <option value="5">Alimentos</option> {% endif %}
+                                {% if transaction.category.id == 6 %} <option selected value="6">Suplementos</option> {% else %} <option value="6">Suplementos</option> {% endif %}
+                                {% if transaction.category.id == 7 %} <option selected value="7">Cuidado personal</option> {% else %} <option value="7">Cuidado personal</option> {% endif %}
+                                {% if transaction.category.id == 8 %} <option selected value="8">Seguros</option> {% else %} <option value="8">Seguros</option> {% endif %}
+                                {% if transaction.category.id == 9 %} <option selected value="9">Limpieza</option> {% else %} <option value="9">Limpieza</option> {% endif %}
+                                {% if transaction.category.id == 10 %} <option selected value="10">Alquiler</option> {% else %} <option value="10">Alquiler</option> {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto">
+                            <label for="update-description" class="form-label">Descripción</label>
+                            <input class="form-control" type="text" name="update-description" id="update-description" value="{{ transaction.description }}">
+                        </div>
+                        <div class="col-auto">
+                            <label for="update-amount" class="form-label">Monto</label>
+                            <input class="form-control" type="number" step="0.01" name="update-amount" id="update-amount" value="{{ transaction.amount | floatformat:'2u' }}">
+                        </div>
+                        <div class="col-auto">
+                            <button id="update-button" class="form-control" type="submit">Actualizar</button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+        <!--<script>
+            document.querySelector("#update-button").addEventListener('click', () => {
+                // get transaction id
+                let id = "{{ transaction.id }}"
+                //console.log(id)
+                // get data from form
+                const update_date = document.querySelector("#update-date").value
+                const update_category = document.querySelector("#update-category").value
+                const update_description = document.querySelector("#update-description").value
+                const update_amount = document.querySelector("#update-amount").value
+                // get csrf token from django template {% csrf_token %}
+                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                // make post to backend
+                fetch(`/update_transaction/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    mode: 'same-origin',
+                    body: JSON.stringify({
+                        date: update_date,
+                        category: update_category,
+                        description: update_description,
+                        amount: update_amount
+                    })
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch(error => console.log(error))
+                    window.close()
+            })
+        </script> -->
+        {% endif %}
+        <!--Javascript project-->
+        <script src="{% static 'budget/app.js' %}" defer></script>
+    </body>
+</html>
