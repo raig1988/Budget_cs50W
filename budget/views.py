@@ -1,4 +1,5 @@
 from datetime import datetime
+from xxlimited import new
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
@@ -20,7 +21,6 @@ from django.db.models.query_utils import Q
 from django.db.models import Sum, FloatField
 from django.db.models.functions import Round
 # Csrf exempt
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
 
 def index(request):
@@ -29,6 +29,20 @@ def index(request):
     elif Profile.objects.filter(user=request.user).exists():
         return render(request, "budget/index.html", {"profile" : Profile.objects.get(user=request.user)})
     return render(request, "budget/index.html")
+
+def add_budget(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        category = data.get("category")
+        amount = data.get("amount")
+        new_budget = Budget(user=request.user, category_id=category, amount=amount, input_date=datetime.now())
+        new_budget.save()
+        return JsonResponse({"message": "Budget succesfully added"})
+
+def budget(request):
+    user_budget = Budget.objects.filter(user=request.user)
+    total_budget = Budget.objects.filter(user=request.user).aggregate(total_sum=Round(Sum('amount'),2))
+    return JsonResponse({"budget": [item.serialize_budget() for item in user_budget], "total_budget": total_budget["total_sum"]})
 
 def update_transaction(request, id):
     transaction_id = id

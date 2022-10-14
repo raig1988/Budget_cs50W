@@ -7,11 +7,13 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector("#profile-nav").addEventListener('click', () => load_page("profile"));
     document.querySelector("#transacciones-nav").addEventListener('click', () => load_page("transacciones"));
     document.querySelector("#main-summary-nav").addEventListener('click', () => load_page("main-summary"));
+    document.querySelector("#presupuesto-nav").addEventListener('click', () => load_page("presupuesto"));
     // main content loaded when page loads, background functions
     toggle_transaction_summary()
     transactions_onchange()
-    // add new transaction
+    // add new transaction & add new budget
     document.querySelector("#newTransaction").onsubmit = add_new_transaction;
+    document.querySelector("#budget-form").onsubmit = add_budget;
 });
 
 // load page function
@@ -21,6 +23,7 @@ function load_page(page) {
         document.querySelector("#profile").style.display = "none";
         document.querySelector("#intro").style.display = "none";
         document.querySelector("#main-summary").style.display = "none";
+        document.querySelector("#presupuesto").style.display = "none";
         load_transactions();
     }
     else if (page === "main-summary") {
@@ -28,6 +31,7 @@ function load_page(page) {
         document.querySelector("#profile").style.display = "none";
         document.querySelector("#intro").style.display = "none";
         document.querySelector("#transactions").style.display = "none";
+        document.querySelector("#presupuesto").style.display = "none";
         general_summary();
         createGraph();
     }
@@ -36,13 +40,117 @@ function load_page(page) {
         document.querySelector("#intro").style.display = "none";
         document.querySelector("#main-summary").style.display = "none";
         document.querySelector("#transactions").style.display = "none";
+        document.querySelector("#presupuesto").style.display = "none";
     }
     else if(page === "intro") {
         document.querySelector("#intro").style.display = "block";
         document.querySelector("#profile").style.display = "none";
         document.querySelector("#main-summary").style.display = "none";
         document.querySelector("#transactions").style.display = "none";
+        document.querySelector("#presupuesto").style.display = "none";
     }
+    else if(page === "presupuesto") {
+        document.querySelector("#presupuesto").style.display = "block";
+        document.querySelector("#intro").style.display = "none";
+        document.querySelector("#profile").style.display = "none";
+        document.querySelector("#main-summary").style.display = "none";
+        document.querySelector("#transactions").style.display = "none";
+        load_budget();
+    }
+}
+
+function load_budget() {
+    // erase previous loads of table
+    document.querySelector("#tabla-presupuesto").innerHTML = "";
+    // get budget data from database
+    fetch("/budget")
+        .then(response => response.json())
+        .then(data => {
+            // check if user has registered budget
+            if(data.budget.length === 0) {
+                return;
+            }
+            // check if user has set all budget elements
+            if(data.budget.length === 9) {
+                document.querySelector("#budget-form").innerHTML = "";
+            }
+            // check if user has incomplete budget elements to register and delete those that have already been registered
+            if (data.budget.length < 9) {
+                // dissapear options in form in case user has already set budget for that category
+                data.budget.forEach(category => {
+                    if(document.querySelector("#budget-apps").innerHTML === category.category) { document.querySelector("#budget-apps").style.display = "none";}
+                    else if(document.querySelector("#budget-servicios").innerHTML === category.category) { document.querySelector("#budget-servicios").style.display = "none";}
+                    else if(document.querySelector("#budget-otros").innerHTML === category.category) { document.querySelector("#budget-otros").style.display = "none";}
+                    else if(document.querySelector("#budget-alimentos").innerHTML === category.category) { document.querySelector("#budget-alimentos").style.display = "none";}
+                    else if(document.querySelector("#budget-suplementos").innerHTML === category.category) { document.querySelector("#budget-suplementos").style.display = "none";}
+                    else if(document.querySelector("#budget-cuidadopersonal").innerHTML === category.category) { document.querySelector("#budget-cuidadopersonal").style.display = "none";}
+                    else if(document.querySelector("#budget-seguros").innerHTML === category.category) { document.querySelector("#budget-seguros").style.display = "none";}
+                    else if(document.querySelector("#budget-limpieza").innerHTML === category.category) { document.querySelector("#budget-limpieza").style.display = "none";}
+                    else if(document.querySelector("#budget-alquiler").innerHTML === category.category) { document.querySelector("#budget-alquiler").style.display = "none";}
+                })
+            }
+            // get table element
+            const table = document.querySelector("#tabla-presupuesto")
+            // create table head element
+            const thead = document.createElement('thead')
+            const thead_tr = document.createElement('tr')
+            thead_tr.innerHTML = `<th scope='col'>Categoria</th>
+                                  <th scope='col'>Monto</th>
+                                  <th scope='col'>Última modificación</th>
+                                    `
+            thead.appendChild(thead_tr);
+            const tbody = document.createElement('tbody')
+            data.budget.forEach(item => {
+                console.log(item)
+                // create body elements
+                const tbody_tr = document.createElement('tr')
+                tbody_tr.innerHTML = `<td>${item.category}</td>
+                                      <td>${item.amount}</td>
+                                      <td>${item.input_date}</td>
+                                    `
+                tbody.appendChild(tbody_tr)
+            })
+            // create total row
+            const total_tr = document.createElement('tr')
+            total_tr.innerHTML = `<th scope='row'>Total</th>
+                                <td>${data.total_budget}</td>
+                                <td></td>
+                                    `
+            tbody.append(total_tr)
+            // append elements to table outside the loop
+            table.append(thead, tbody)
+        })
+        .catch(error => console.log(error))
+}
+
+function add_budget() {
+    // get form values for category and amount
+    const budget_category = document.querySelector("#budget-category").value;
+    const budget_amount = document.querySelector("#budget-amount").value;
+    // get csrf token from django template {% csrf_token %}
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    // send data via post
+    fetch('/add_budget', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        mode: 'same-origin',
+        body: JSON.stringify({
+            category: budget_category,
+            amount: budget_amount
+        })
+    })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            load_budget();
+            document.querySelector("#budget-category").value = "";
+            document.querySelector("#budget-amount").value = "";
+        })
+        .catch(error => console.log(error))
+    return false;
 }
 
 function add_new_transaction() {
@@ -478,14 +586,16 @@ function toggle_transaction_summary() {
         event.preventDefault();
         if (button.value === "Resumen mensual") {
             button.value = "Transacciones del mes"
-            document.querySelector("#table-transactions").style.display = "none";
             document.querySelector("#table-summary-month-transactions").style.display = "block";
+            document.querySelector("#table-transactions").style.display = "none";
+            document.querySelector("#newTransaction").style.display = "none";
             summary_month()
             return
         } else if (button.value === "Transacciones del mes") {
             button.value = "Resumen mensual"
             document.querySelector("#table-summary-month-transactions").style.display = "none";
             document.querySelector("#table-transactions").style.display = "block";
+            document.querySelector("#newTransaction").style.display = "block";
             load_transactions()
             return
         }

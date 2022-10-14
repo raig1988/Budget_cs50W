@@ -4,6 +4,44 @@
 {% block title %}Finanzas personales{% endblock %}
 
 {% block body %}
+
+    <!--Section presupuesto-->
+    <section id="presupuesto">
+        <div class="row p-5 justify-content-center">
+            <div class="col-8 col-md-6 col-lg-6 bg-light">
+                <!--form to add budget-->
+                <form id="budget-form" class="row mb-4">
+                {% csrf_token %}
+                <h3 class="mb-3">Ingresa la categoria y el monto</h3>
+                    <div class="col-auto">
+                        <label for="budget-category" class="form-label">Categoria</label>
+                        <select class="form-select" name="budget-category" id="budget-category">
+                            <option value="" selected disabled hidden>Selecciona</option>
+                            <option id="budget-apps" value="2">Apps</option>
+                            <option id="budget-servicios" value="3">Servicios</option>
+                            <option id="budget-otros" value="4">Otros</option>
+                            <option id="budget-alimentos" value="5">Alimentos</option>
+                            <option id="budget-suplementos" value="6">Suplementos</option>
+                            <option id="budget-cuidadopersonal" value="7">Cuidado personal</option>
+                            <option id="budget-seguros" value="8">Seguros</option>
+                            <option id="budget-limpieza" value="9">Limpieza</option>
+                            <option id="budget-alquiler" value="10">Alquiler</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label for="budget-amount" class="form-label">Monto</label>
+                        <input class="form-control" type="number" step="0.01" name="budget-amount" id="budget-amount">
+                    </div>
+                    <div class="col-auto">
+                        <button class="form-control" type="submit">Añadir</button>
+                    </div>
+                </form>
+                <table id="tabla-presupuesto" class="table table-bordered border-dark"></table>
+            </div>
+        </div>
+    </section>
+
+
     <!--Section intro-->
     <section id="intro">
         <div class="row p-5 justify-content-center">

@@ -14,5 +14,7 @@ urlpatterns = [
     path("general_summary/<str:date>", views.general_summary, name="general_summary"),
     path("new_transaction", views.new_transaction, name="new_transaction"),
     path("delete_transaction/<int:id>", views.delete_transaction, name="delete_transaction"),
-    path("update_transaction/<int:id>", views.update_transaction, name="update_transaction")
+    path("update_transaction/<int:id>", views.update_transaction, name="update_transaction"),
+    path("budget", views.budget, name="budget"),
+    path("add_budget", views.add_budget, name="add_budget")
 ]
