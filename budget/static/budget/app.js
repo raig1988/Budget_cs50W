@@ -545,142 +545,1400 @@ function general_summary() {
         if(data.total_monthly[11]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[11].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
         if(data.total_monthly[12]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[12].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
         // check if data attribute is equal to category per month and create cell if it does exist
-        data.january.forEach(item => {  
-            // check if there is data for january
-                // if (data.january.length) { }
-                console.log(item)
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
+        // add all categories used in the month
+        let already_run = true;
+        let categories_per_january = []
+        for (let i = 0; i < data.january.length; i++) {
+            categories_per_january.push(data.january[i].category)
+        }
+        data.january.forEach(item => {
+            if (data.january.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_january.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_january.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_january.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_january.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_january.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_january.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_january.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_january.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_january.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
+        already_run = true;
+        let categories_per_february = []
+        for (let i = 0; i < data.february.length; i++) {
+            categories_per_february.push(data.february[i].category)
+        }
+        data.february.forEach(item => {
+            if (data.february.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_february.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_february.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_february.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_february.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_february.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_february.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_february.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_february.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_february.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
+        already_run = true;
+        let categories_per_march = []
+        for (let i = 0; i < data.march.length; i++) {
+            categories_per_march.push(data.march[i].category)
+        }
+        data.march.forEach(item => {
+            if (data.march.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_march.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_march.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_march.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_march.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_march.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_march.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_march.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_march.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_march.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
+        already_run = true;
+        let categories_per_april = []
+        for (let i = 0; i < data.april.length; i++) {
+            categories_per_april.push(data.april[i].category)
+        }
+        data.april.forEach(item => {
+            if (data.april.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_april.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_april.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_april.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_april.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_april.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_april.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_april.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_april.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_april.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
+        already_run = true;
+        let categories_per_may = []
+        for (let i = 0; i < data.may.length; i++) {
+            categories_per_may.push(data.may[i].category)
+        }
+        data.may.forEach(item => {
+            if (data.may.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_may.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_may.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_may.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_may.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_may.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_may.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_may.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_may.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_may.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
+        already_run = true;
+        let categories_per_june = []
+        for (let i = 0; i < data.june.length; i++) {
+            categories_per_june.push(data.june[i].category)
+        }
+        data.june.forEach(item => {
+            if (data.june.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_june.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_june.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_june.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_june.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_june.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_june.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_june.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_june.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_june.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
+        already_run = true;
+        let categories_per_july = []
+        for (let i = 0; i < data.july.length; i++) {
+            categories_per_july.push(data.july[i].category)
+        }
+        data.july.forEach(item => {
+            if (data.july.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_july.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_july.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_july.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_july.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_july.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_july.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_july.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_july.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_july.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
+        already_run = true;
+        let categories_per_august = []
+        for (let i = 0; i < data.august.length; i++) {
+            categories_per_august.push(data.august[i].category)
+        }
+        data.august.forEach(item => {
+            if (data.august.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_august.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_august.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_august.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_august.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_august.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_august.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_august.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_august.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_august.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
+        already_run = true;
+        let categories_per_september = []
+        for (let i = 0; i < data.september.length; i++) {
+            categories_per_september.push(data.september[i].category)
+        }
+        data.september.forEach(item => {
+            if (data.september.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_september.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_september.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_september.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_september.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_september.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_september.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_september.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_september.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_september.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
+        already_run = true;
+        let categories_per_october = []
+        for (let i = 0; i < data.october.length; i++) {
+            categories_per_october.push(data.october[i].category)
+        }
+        data.october.forEach(item => {
+            if (data.october.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_october.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_october.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_october.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_october.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_october.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_october.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_october.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_october.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_october.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
+        already_run = true;
+        let categories_per_november = []
+        for (let i = 0; i < data.november.length; i++) {
+            categories_per_november.push(data.november[i].category)
+        }
+        data.november.forEach(item => {
+            if (data.november.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_november.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_november.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_november.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_november.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_november.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_november.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_november.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_november.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_november.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
+        already_run = true;
+        let categories_per_december = []
+        for (let i = 0; i < data.december.length; i++) {
+            categories_per_december.push(data.december[i].category)
+        }
+        data.december.forEach(item => {
+            if (data.december.length > 0) {
+                let td_apps = document.createElement("td"); 
+                if (item.category === 2) { 
+                    td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_apps.append(td_apps);
+                } else if (categories_per_december.includes(2) === false) {
+                    if (already_run) {
+                        td_apps.innerHTML = "&nbsp;";
+                        table_body_row_apps.append(td_apps);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_serv = document.createElement("td"); 
+                if (item.category === 3) { 
+                    td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; 
+                    table_body_row_servicios.append(td_serv);
+                } else if (categories_per_december.includes(3) === false) {
+                    if (already_run) {
+                        td_serv.innerHTML = "&nbsp;";
+                        table_body_row_servicios.append(td_serv);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_otros = document.createElement("td");
+                if (item.category === 4) {
+                    td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_otros.append(td_otros);
+                } else if (categories_per_december.includes(4) === false) {
+                    if (already_run) {
+                        td_otros.innerHTML = "&nbsp;";
+                        table_body_row_otros.append(td_otros);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_alimentos = document.createElement("td");
+                if (item.category === 5) { 
+                    td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alimentos.append(td_alimentos);
+                } else if (categories_per_december.includes(5) === false) {
+                    if (already_run) {
+                        td_alimentos.innerHTML = "&nbsp;";
+                        table_body_row_alimentos.append(td_alimentos);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_suplementos = document.createElement("td");
+                if (item.category === 6) { 
+                    td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_suplementos.append(td_suplementos);
+                } else if (categories_per_december.includes(6) === false ) {
+                    if (already_run) {
+                        td_suplementos.innerHTML = "&nbsp;";
+                        table_body_row_suplementos.append(td_suplementos);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_cuid_pers = document.createElement("td");
+                if (item.category === 7) { 
+                    td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_cuid_pers.append(td_cuid_pers);
+                } else if (categories_per_december.includes(7) === false) {
+                    if (already_run) {
+                        td_cuid_pers.innerHTML = "&nbsp;";
+                        table_body_row_cuid_pers.append(td_cuid_pers);
+                        already_run = false;
+                    }
+                }
+                //
+                let td_seguros = document.createElement("td");
+                if (item.category === 8) { 
+                    td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_seguros.append(td_seguros);
+                } else if (categories_per_december.includes(8) === false) {
+                    if (already_run) {
+                        td_seguros.innerHTML = "&nbsp;";
+                        table_body_row_seguros.append(td_seguros);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_limpieza = document.createElement("td");
+                if (item.category === 9) { 
+                    td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_limpieza.append(td_limpieza);
+                } else if (categories_per_december.includes(9) === false) {
+                    if (already_run) {
+                        td_limpieza.innerHTML = "&nbsp;";
+                        table_body_row_limpieza.append(td_limpieza);
+                        already_run = false;
+                    }
+                }
+                // 
+                let td_alquiler = document.createElement("td");
+                if (item.category === 10) { 
+                    td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;
+                    table_body_row_alquiler.append(td_alquiler);
+                } else if (categories_per_december.includes(10) === false) {
+                    if (already_run) {
+                        td_alquiler.innerHTML = "&nbsp;";
+                        table_body_row_alquiler.append(td_alquiler);
+                        already_run = false;
+                    } 
+                }
+            }
+        })
 
-        })
-        data.february.forEach(item => { 
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
-        })
-        data.march.forEach(item => { 
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
-        })
-        data.april.forEach(item => { 
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
-        })
-        data.may.forEach(item => { 
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
-        })
-        data.june.forEach(item => { 
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
-        })
-        data.july.forEach(item => { 
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
-        })
-        data.august.forEach(item => { 
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
-        })
-        data.september.forEach(item => { 
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
-        })
-        data.october.forEach(item => { 
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
-        })
-        data.november.forEach(item => { 
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
-        })
-        data.december.forEach(item => { 
-            if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
-            if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
-            if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
-            if (item.category === parseInt(table_body_row_alimentos.dataset.category)) { let td_alimentos = document.createElement("td");td_alimentos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alimentos.append(td_alimentos);}
-            if (item.category === parseInt(table_body_row_suplementos.dataset.category)) { let td_suplementos = document.createElement("td");td_suplementos.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_suplementos.append(td_suplementos);}
-            if (item.category === parseInt(table_body_row_cuid_pers.dataset.category)) { let td_cuid_pers = document.createElement("td");td_cuid_pers.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_cuid_pers.append(td_cuid_pers);}
-            if (item.category === parseInt(table_body_row_seguros.dataset.category)) { let td_seguros = document.createElement("td");td_seguros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_seguros.append(td_seguros);}
-            if (item.category === parseInt(table_body_row_limpieza.dataset.category)) { let td_limpieza = document.createElement("td");td_limpieza.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_limpieza.append(td_limpieza);}
-            if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
-        })
         // main append to table of body elements
         table_body.append(table_body_row_apps, table_body_row_servicios, table_body_row_otros, table_body_row_alimentos, table_body_row_suplementos, table_body_row_cuid_pers, table_body_row_seguros, table_body_row_limpieza, table_body_row_alquiler, table_body_row_total);
         table.append(table_body)
