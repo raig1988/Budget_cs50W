@@ -8,38 +8,84 @@
     <!--Section presupuesto-->
     <section id="presupuesto">
         <div class="row p-5 justify-content-center">
-            <div class="col-8 col-md-6 col-lg-6 bg-light">
+            <div class="col-12 col-md-10 col-lg-6 bg-light">
                 <!--form to add budget-->
                 <form id="budget-form" class="row mb-4">
                 {% csrf_token %}
+                <h3 class="fw-bolder">Crea tu presupuesto</h3>
                 <h3 class="mb-3">Ingresa la categoria y el monto</h3>
-                    <div class="col-auto">
-                        <label for="budget-category" class="form-label">Categoria</label>
-                        <select class="form-select" name="budget-category" id="budget-category">
-                            <option value="" selected disabled hidden>Selecciona</option>
-                            <option id="budget-apps" value="2">Apps</option>
-                            <option id="budget-servicios" value="3">Servicios</option>
-                            <option id="budget-otros" value="4">Otros</option>
-                            <option id="budget-alimentos" value="5">Alimentos</option>
-                            <option id="budget-suplementos" value="6">Suplementos</option>
-                            <option id="budget-cuidadopersonal" value="7">Cuidado personal</option>
-                            <option id="budget-seguros" value="8">Seguros</option>
-                            <option id="budget-limpieza" value="9">Limpieza</option>
-                            <option id="budget-alquiler" value="10">Alquiler</option>
-                        </select>
+                    <div class="row mb-3">
+                        <div class="col-auto">
+                            <label for="budget-category" class="form-label">Categoria</label>
+                            <select class="form-select" name="budget-category" id="budget-category">
+                                <option value="" selected disabled hidden>Selecciona</option>
+                                <option id="budget-apps" value="2">Apps</option>
+                                <option id="budget-servicios" value="3">Servicios</option>
+                                <option id="budget-otros" value="4">Otros</option>
+                                <option id="budget-alimentos" value="5">Alimentos</option>
+                                <option id="budget-suplementos" value="6">Suplementos</option>
+                                <option id="budget-cuidadopersonal" value="7">Cuidado personal</option>
+                                <option id="budget-seguros" value="8">Seguros</option>
+                                <option id="budget-limpieza" value="9">Limpieza</option>
+                                <option id="budget-alquiler" value="10">Alquiler</option>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <label for="budget-amount" class="form-label">Monto</label>
+                            <input class="form-control" type="number" step="0.01" name="budget-amount" id="budget-amount">
+                        </div>
                     </div>
-                    <div class="col-auto">
-                        <label for="budget-amount" class="form-label">Monto</label>
-                        <input class="form-control" type="number" step="0.01" name="budget-amount" id="budget-amount">
-                    </div>
-                    <div class="col-auto">
-                        <button class="form-control" type="submit">Añadir</button>
+                    <div class="row">
+                        <div class="col-auto">
+                            <button class="form-control btn btn-secondary" type="submit">Añadir</button>
+                        </div>
                     </div>
                 </form>
-                <table id="tabla-presupuesto" class="table table-bordered border-dark"></table>
+                <div class="table-responsive">
+                    <table id="tabla-presupuesto" class="table table-bordered text-start"></table>
+                </div>
             </div>
         </div>
     </section>
+
+    <!--Create edit budget section -->
+    <div class="modal fade" id="edit-budget" tabindex="-1" aria-labelledby="BudgetLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="BudgetLabel">Actualizar presupuesto</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="update-budget">
+                {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="container-fluid">
+                                    {% include 'budget/includes/messages.html' %}
+                                    <h5>Información previa esta precargada</h5>
+                                </div>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <label for="update-budget-category" class="form-label">Categoria</label>
+                                        <h5 id="update-budget-category"></h5>
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="update-budget-amount" class="form-label">Monto</label>
+                                        <input class="form-control" type="number" step="0.01" name="update-budget-amount" id="update-budget-amount">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="update-budget-button" class="btn btn-secondary" type="submit">Actualizar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
     <!--Section intro-->
@@ -72,62 +118,68 @@
                 <div class="mb-1 text-danger">{{ message }}</div>
             {% endif %}
             <!--Add nickname-->
-            <form action="{% url 'setnickname' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group mb-3">
-                    <label for="nickname" class="form-label">¿Cómo te gustaria ser llamado en la app?</label>
-                    <input id="nickname" class="form-control" type="text" name="nickname" placeholder="Nickname">
-                </div>
-                <input class="btn btn-primary" type="submit" value="Cambia tu nickname">
-            </form>
-            <!--End nickname-->
+                <form action="{% url 'setnickname' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label for="nickname" class="form-label">¿Cómo te gustaria ser llamado en la app?</label>
+                        <input id="nickname" class="form-control" type="text" name="nickname" placeholder="Nickname">
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Cambia tu nickname">
+                </form>
             <!--Change password-->
-            <form action="{% url 'change_password' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group mb-3 mt-4">
-                    <label for="changepassword" class="form-label">Cambia tu contraseña</label>
-                    <input id="changepassword" class="form-control" type="password" name="changepassword" placeholder="Cambia tu contraseña">
-                </div>
-                <div class="form-group mb-3">
-                    <input class="form-control" type="password" name="confirmationpassword" placeholder="Confirma la nueva contraseña">
-                </div>
-                <input class="btn btn-primary" type="submit" value="Cambiar contraseña">
-            </form>
-            <!--End change password-->
+                <form action="{% url 'change_password' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group mb-3 mt-4">
+                        <label for="changepassword" class="form-label">Cambia tu contraseña</label>
+                        <input id="changepassword" class="form-control" type="password" name="changepassword" placeholder="Cambia tu contraseña">
+                    </div>
+                    <div class="form-group mb-3">
+                        <input class="form-control" type="password" name="confirmationpassword" placeholder="Confirma la nueva contraseña">
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Cambiar contraseña">
+                </form>
             </div>
         </div>
     </section>
+
     <!--Shows main summary transactions per year-->
     <section id="main-summary">
-            <!--Form to enter year of transactions-->
-            <div id="error-selection-summary" class="alert alert-danger" role="alert"></div>
-            <div class="row justify-content-center mb-4 text-center">  
-                <div class="col-auto">
-                    <h3 class="form-label">Selecciona año</h3>
+        <div class="row p-5 justify-content-center">
+            <div class="col-12 col-md-12 col-lg-12 bg-light">
+                <!--Form to enter year of transactions-->
+                <div id="error-selection-summary" class="alert alert-danger" role="alert"></div>
+                <div class="row justify-content-center mb-4 text-center">  
+                    <div class="col-auto">
+                        <h3 class="form-label">Selecciona año</h3>
+                    </div>
+                    <div class="col-auto">
+                        <input class="form-control" id="select-summary-year" name="year" type="number" min="1900" max="2099" step="1" value="2022" />
+                    </div>
                 </div>
-                <div class="col-auto">
-                    <input class="form-control" id="select-summary-year" name="year" type="number" min="1900" max="2099" step="1" value="2022" />
+                <!--Table with data for expenses per month-->
+                <div class="row justify-content-center mb-4">
+                    <div class="table-responsive col-8">
+                        <table id="main-summary-table" class="table table-fit table-secondary table-striped table-bordered text-start mx-auto"></table> 
+                    </div>
                 </div>
+                <!--Table with data per average anually-->
+                <table id="average-summary-table" class="table table-fit table-secondary table-striped table-bordered text-start mx-auto"></table>
+                <!--Charts-->
+                <div id="charts"></div>
             </div>
-            <!--Table with data-->
-            <div class="row justify-content-center mb-4">
-                <div class="table-responsive col-8">
-                    <table id="main-summary-table" class="table table-bordered border-dark text-start"></table> 
-                </div>
-            </div>
-        <!--Charts-->
-        <div id="charts"></div>
+        </div>
     </section>
-    <!--end Main summary transactions per year-->
 
     <!--Show transactions per month-->
     <section id="transactions">
         <div class="row p-5 justify-content-center">
-            <div class="col-8 col-md-6 col-lg-6 bg-light">
+            <div class="col-12 col-md-12 col-lg-8 bg-light">
                 <!--Form to input month and year-->
                 <div id="error-selection" class="alert alert-danger" role="alert"></div>
+                <!--month and year selected title-->
+                <div id="transaction-month"></div>
                 <h3 class="mb-3">Selecciona mes y año</h3>
-                <div class="row mb-3">
+                <div class="row mb-3 g-3">
                     <div class="col-auto">
                         <select class="form-select" name="month" id="select-transaction-month">
                             <option value="1">Enero</option>
@@ -148,13 +200,12 @@
                         <input class="form-control" id="select-transaction-year" name="year" type="number" min="1900" max="2099" step="1" value="2022" />
                     </div>
                     <div class="col-auto">
-                        <input id="toggle-transacciones-resumen" class="form-control" type="button" value="Resumen mensual"/>
+                        <input id="toggle-transacciones-resumen" class="form-control btn btn-secondary" type="button" value="Resumen mensual"/>
                     </div>
                 </div>
-                <!--month and year selected title-->
-                <div id="transaction-month"></div>
                 <!--Form to add new transactions-->
                 <form class="row mt-2" id="newTransaction">
+                    <h3 class="mb-3">Agrega nueva transacción</h3>
                     {% csrf_token %}
                     <!--Add a form below month and year title where you can set all info related to transaction
                     date, category, description, amount-->
@@ -178,7 +229,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-2 align-items-center">
                         <div class="col-auto">
                             <label for="transaction-description" class="form-label">Descripción</label>
                             <input class="form-control" type="text" name="transaction-description" id="transaction-description">
@@ -187,15 +238,20 @@
                             <label for="transaction-amount" class="form-label">Monto</label>
                             <input class="form-control" type="number" step="0.01" name="transaction-amount" id="transaction-amount">
                         </div>
+                    </div>
+                    <div class="row mt-3 align-items-center">
                         <div class="col-auto">
-                            <button class="form-control" type="submit">Enviar</button>
+                            <button class="form-control btn btn-secondary" type="submit">Enviar</button>
                         </div>
                     </div>
+                    
                 </form>
                 <!--transactions per month by category-->
-                <table id="table-summary-month-transactions" class="table table-bordered"></table>
+                <table id="table-summary-month-transactions" class="table table-bordered text-start"></table>
                 <!--all transactions per day by month-->
-                <table id="table-transactions" class="table table-bordered"></table>
+                <div class="table-responsive">
+                    <table id="table-transactions" class="table table-bordered text-start"></table>
+                </div>
             </div>
         </div>
     </section>

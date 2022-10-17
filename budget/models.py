@@ -1,6 +1,6 @@
-from unicodedata import decimal
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 # Create your models here.
 class User(AbstractUser):
@@ -26,6 +26,9 @@ class Transactions(models.Model):
     amount = models.FloatField()
     input_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ('date__day',)
+
     def __str__(self) -> str:
         return f"id: {self.id} - user: {self.user} - date: {self.date} - category: {self.category} - description: {self.description} - amount: {self.amount} - input date: {self.input_date}"
 
@@ -38,7 +41,7 @@ class Transactions(models.Model):
             "description" : self.description,
             "category" : self.category.category,
             "amount" : self.amount,
-            "input_date" : self.input_date.strftime("%b %d %Y, %I:%M %p"),
+            "input_date" : self.input_date.strftime("%b %d %Y, %I:%M %p")
         }
 
 class Budget(models.Model):
@@ -48,7 +51,7 @@ class Budget(models.Model):
     input_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"user: {self.user} - category: {self.category} - amount: {self.amount} - input date: {self.input_date}"
+        return f"id: {self.id} - user: {self.user} - category: {self.category} - amount: {self.amount} - input date: {self.input_date}"
 
     def serialize_budget(self):
         return {

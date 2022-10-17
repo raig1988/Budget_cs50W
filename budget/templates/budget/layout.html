@@ -2,32 +2,30 @@
 
 <!doctype html>
 <html lang="es">
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--Bootstrap CSS-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
     <link href="{% static '/budget/styles.css' %}" rel="stylesheet">
     <!--Google Fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
-    <!--End Google Fonts-->
     <!--Social media Icons-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!--End social media icons-->
     <!--Webicons-->
     <script src="https://kit.fontawesome.com/43c3a3cc13.js" crossorigin="anonymous"></script>
-    <!--end webicons-->
-    <title>{% block title %}{% endblock %}</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
     <!--JsCharting-->
     <script src="https://code.jscharting.com/latest/jscharting.js"></script>
     <!--ChartJS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!--ChartJS plugin datalabels-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>{% block title %}{% endblock %}</title>
 </head>
+
 <body class="d-flex flex-column min-vh-100">
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg bg-light p-4 border-bottom border-dark">
@@ -71,18 +69,18 @@
             <!--End Navbar items-->
         </div>
     </nav>
-    <!--end Navbar-->
+
     <!--Section title-->
     <div class="container-fluid p-3">
         {% include 'budget/includes/messages.html' %}
     </div>
-    <!--end Section title-->
+
     <!--Start body-->
     <div class="container-fluid">
         {% block body %}
         {% endblock %}
     </div>
-    <!--end Body-->
+
     <!--Start Footer-->
     <div class="container-fluid mt-auto">
         <div class="row px-4 pt-4 justify-content-center">
@@ -97,16 +95,14 @@
             </div>
         </div>
         <div class="row p-2 justify-content-center text-center">
-            <small class="fs-6">&copy; 2022 Rodrigo Iglesias</small>
+            <small class="fs-6">&copy; {% now "Y" %} Rodrigo Iglesias</small>
         </div>
     </div>
-    <!--end Footer-->
+
     <!--Bootstrap Javascript-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
-    <!--end Bootstrap JS-->
     <!--Javascript project-->
     <script src="{% static '/budget/app.js'  %}" defer></script>
+    
   </body>
 </html>

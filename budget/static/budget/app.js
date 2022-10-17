@@ -72,10 +72,12 @@ function load_budget() {
             }
             // check if user has set all budget elements
             if(data.budget.length === 9) {
-                document.querySelector("#budget-form").innerHTML = "";
+                document.querySelector("#budget-form").style.display = "none";
             }
             // check if user has incomplete budget elements to register and delete those that have already been registered
             if (data.budget.length < 9) {
+                // show form
+                document.querySelector("#budget-form").style.display = "block";
                 // dissapear options in form in case user has already set budget for that category
                 data.budget.forEach(category => {
                     if(document.querySelector("#budget-apps").innerHTML === category.category) { document.querySelector("#budget-apps").style.display = "none";}
@@ -92,35 +94,132 @@ function load_budget() {
             // get table element
             const table = document.querySelector("#tabla-presupuesto")
             // create table head element
-            const thead = document.createElement('thead')
-            const thead_tr = document.createElement('tr')
+            let thead = document.createElement('thead')
+            let thead_tr = document.createElement('tr')
             thead_tr.innerHTML = `<th scope='col'>Categoria</th>
                                   <th scope='col'>Monto</th>
                                   <th scope='col'>Última modificación</th>
                                     `
             thead.appendChild(thead_tr);
-            const tbody = document.createElement('tbody')
+            let tbody = document.createElement('tbody');
+            // append elements to table outside the loop
+            table.append(thead, tbody);
+            // loop for each element in budget
             data.budget.forEach(item => {
-                console.log(item)
                 // create body elements
-                const tbody_tr = document.createElement('tr')
-                tbody_tr.innerHTML = `<td>${item.category}</td>
-                                      <td>${item.amount}</td>
-                                      <td>${item.input_date}</td>
+                let tbody_tr = document.createElement('tr')
+                tbody_tr.setAttribute('id', `budget${item.id}`)
+                tbody_tr.innerHTML = `<td id='budgetcategory${item.id}'>${item.category}</td>
+                                      <td id='budgetamount${item.id}'>${item.amount}</td>
+                                      <td id='budgetinput${item.id}'>${item.input_date}</td>
+                                      <td id='eraseBudget${item.id}'><a href='#' class='btn btn-secondary'>Eliminar</a>
+                                      <td id='editBudget${item.id}'><button type='button' class='btn btn-secondary' data-bs-toggle='modal' data-bs-target='#edit-budget'>Editar</button></td>
                                     `
                 tbody.appendChild(tbody_tr)
+                // activate deleting function when clicking button Eliminar
+                document.querySelector(`#eraseBudget${item.id}`).onclick = function(event) {
+                    event.preventDefault(); 
+                    if(confirm("¿Estás seguro de eliminar el presupuesto?") == true) {
+                        delete_budget(item.id)
+                    } else (close())
+                }
+                // activate editing function when clicking button Editar
+                document.querySelector(`#editBudget${item.id}`).onclick = function(event) { 
+                    event.preventDefault();
+                    // first get method when loading modal
+                    fetch(`/update_budget/${item.id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // get data for category, amount
+                            let category = data.category;
+                            let amount = data.amount;
+                            // get id from elements
+                            document.querySelector("#update-budget-category").innerHTML = category;
+                            document.querySelector("#update-budget-amount").value = amount;
+                            // update when clicking actualizar button - put method 
+                            document.querySelector("#update-budget-button").onclick = function(event) {
+                                event.preventDefault();
+                                update_budget(item.id);
+                            }
+                        })
+                        .catch(error => console.log(error))
+                    }
             })
             // create total row
             const total_tr = document.createElement('tr')
             total_tr.innerHTML = `<th scope='row'>Total</th>
-                                <td>${data.total_budget}</td>
+                                <td class='fw-bold' id='total_budget'>${data.total_budget}</td>
                                 <td></td>
                                     `
             tbody.append(total_tr)
-            // append elements to table outside the loop
-            table.append(thead, tbody)
         })
         .catch(error => console.log(error))
+        return false;
+}
+
+function update_budget(id) {
+    // get data from form
+    const update_amount = document.querySelector("#update-budget-amount").value
+    // get csrf token from django template {% csrf_token %}
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    // make put to backend
+    fetch(`/update_budget/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        mode: 'same-origin',
+        body: JSON.stringify({
+            amount: update_amount
+        })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // select row id and update inner html elements (category, amount, input)
+            document.querySelector(`#budgetamount${data.result_budget.id}`).innerHTML = data.result_budget.amount
+            document.querySelector(`#budgetinput${data.result_budget.id}`).innerHTML = data.result_budget.input_date
+            // update total
+            document.querySelector("#total_budget").innerHTML = data.new_total_budget
+        })
+        .catch(error => console.log(error))
+        return false;
+}
+
+function delete_budget(id) {
+    // get csrf token from django template {% csrf_token %}
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    fetch(`delete_budget/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        mode: 'same-origin',
+        body: JSON.stringify({
+          budget_id: id
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+            document.querySelector(`#budget${id}`).innerHTML = "";
+            // display form
+            document.querySelector("#budget-form").style.display = "block";
+            // update total budget
+            document.querySelector("#total_budget").innerHTML = data.new_total_budget;
+            // display option of that category again in form
+            if(document.querySelector("#budget-apps").innerHTML === data.category) { document.querySelector("#budget-apps").style.display = "block";}
+            else if(document.querySelector("#budget-servicios").innerHTML === data.category) { document.querySelector("#budget-servicios").style.display = "block";}
+            else if(document.querySelector("#budget-otros").innerHTML === data.category) { document.querySelector("#budget-otros").style.display = "block";}
+            else if(document.querySelector("#budget-alimentos").innerHTML === data.category) { document.querySelector("#budget-alimentos").style.display = "block";}
+            else if(document.querySelector("#budget-suplementos").innerHTML === data.category) { document.querySelector("#budget-suplementos").style.display = "block";}
+            else if(document.querySelector("#budget-cuidadopersonal").innerHTML === data.category) { document.querySelector("#budget-cuidadopersonal").style.display = "block";}
+            else if(document.querySelector("#budget-seguros").innerHTML === data.category) { document.querySelector("#budget-seguros").style.display = "block";}
+            else if(document.querySelector("#budget-limpieza").innerHTML === data.category) { document.querySelector("#budget-limpieza").style.display = "block";}
+            else if(document.querySelector("#budget-alquiler").innerHTML === data.category) { document.querySelector("#budget-alquiler").style.display = "block";}
+    })
+      .catch(error => console.log(error))
+      return false;
 }
 
 function add_budget() {
@@ -144,7 +243,6 @@ function add_budget() {
     })
         .then(response => response.json())
         .then(result => {
-            console.log(result);
             load_budget();
             document.querySelector("#budget-category").value = "";
             document.querySelector("#budget-amount").value = "";
@@ -346,6 +444,7 @@ function createGraph() {
 function general_summary() {
     // eliminate table display to avoid repetition when reloading and error display
     document.querySelector("#main-summary-table").innerHTML = "";
+    document.querySelector("#average-summary-table").innerHTML = "";
     const error_summary = document.querySelector("#error-selection-summary")
     error_summary.style.display = "none";
     // get selected year
@@ -360,27 +459,53 @@ function general_summary() {
             error_summary.innerHTML = "No existe información para el año seleccionado."
             return
         }
+        // calculate the average expenditure per category
+        const average_table = document.querySelector("#average-summary-table")
+        const table_head_average = document.createElement("thead")
+        table_head_average.innerHTML = `<tr>
+                                            <th scope='col'>Categorias</th>
+                                            <th scope='col'>Promedio anual</th>
+                                        </tr>`
+        const table_body_average = document.createElement("tbody");
+        let total_averages = []
+        data.category_sum.forEach(category => {
+            let table_row_average = document.createElement("tr")
+            table_row_average.innerHTML = `<td>${data.categories[category.category]}</td>
+                                           <td>${parseInt(category.categ_sum / data.total_monthly.length).toFixed(0)}</td>
+                                            `
+            table_body_average.append(table_row_average);
+            total_averages.push(category.categ_sum);
+        })
+        
+        const table_average_footer = document.createElement("tfoot")
+        table_average_footer.innerHTML = `<tr>
+                                            <td>Total</td>
+                                            <td>${parseInt((total_averages.reduce((a, b) => a + b, 0)) / data.total_monthly.length).toFixed(0)}</td>
+                                            </tr>`
+        average_table.append(table_head_average, table_body_average, table_average_footer);
+
         // get table,create table head, table row and first th for Categorias
         const table = document.querySelector("#main-summary-table")
         const table_head = document.createElement("thead")
         const table_head_row = document.createElement("tr")
         const th_categorias = document.createElement("th")
         th_categorias.innerHTML = "Categorias"
-        table_head_row.append(th_categorias)
-        table.append(table_head, table_head_row)
+        table_head_row.appendChild(th_categorias)
+        table_head.appendChild(table_head_row)
+        table.append(table_head)
         // check if data exists per month, then add month column
-        if (data.january.length > 0) {let td = document.createElement("th"); td.innerHTML = "Enero"; table_head_row.append(td)} 
-        if (data.february.length > 0) { let td = document.createElement("th"); td.innerHTML = "Febrero"; table_head_row.append(td);} 
-        if (data.march.length > 0) { let td = document.createElement("th"); td.innerHTML = "Marzo"; table_head_row.append(td);} 
-        if (data.april.length > 0) { let td = document.createElement("th"); td.innerHTML = "Abril"; table_head_row.append(td);} 
-        if (data.may.length > 0) { let td = document.createElement("th"); td.innerHTML = "Mayo"; table_head_row.append(td);} 
-        if (data.june.length > 0) { let td = document.createElement("th"); td.innerHTML = "Junio"; table_head_row.append(td);} 
-        if (data.july.length > 0) { let td = document.createElement("th"); td.innerHTML = "Julio"; table_head_row.append(td);} 
-        if (data.august.length > 0) { let td = document.createElement("th"); td.innerHTML = "Agosto"; table_head_row.append(td);} 
-        if (data.september.length > 0) { let td = document.createElement("th"); td.innerHTML = "Septiembre"; table_head_row.append(td);} 
-        if (data.october.length > 0) { let td = document.createElement("th"); td.innerHTML = "Octubre"; table_head_row.append(td);} 
-        if (data.november.length > 0) { let td = document.createElement("th"); td.innerHTML = "Noviembre"; table_head_row.append(td);} 
-        if (data.december.length > 0) { let td = document.createElement("th"); td.innerHTML = "Diciembre"; table_head_row.append(td);} 
+        if (data.january.length > 0) {let td = document.createElement("th"); td.innerHTML = "Enero"; table_head_row.append(td);}
+        if (data.february.length > 0) { let td = document.createElement("th"); td.innerHTML = "Febrero"; table_head_row.append(td);}
+        if (data.march.length > 0) { let td = document.createElement("th"); td.innerHTML = "Marzo"; table_head_row.append(td);}
+        if (data.april.length > 0) { let td = document.createElement("th"); td.innerHTML = "Abril"; table_head_row.append(td);}
+        if (data.may.length > 0) { let td = document.createElement("th"); td.innerHTML = "Mayo"; table_head_row.append(td);}
+        if (data.june.length > 0) { let td = document.createElement("th"); td.innerHTML = "Junio"; table_head_row.append(td);}
+        if (data.july.length > 0) { let td = document.createElement("th"); td.innerHTML = "Julio"; table_head_row.append(td);}
+        if (data.august.length > 0) { let td = document.createElement("th"); td.innerHTML = "Agosto"; table_head_row.append(td);}
+        if (data.september.length > 0) { let td = document.createElement("th"); td.innerHTML = "Septiembre"; table_head_row.append(td);}
+        if (data.october.length > 0) { let td = document.createElement("th"); td.innerHTML = "Octubre"; table_head_row.append(td);}
+        if (data.november.length > 0) { let td = document.createElement("th"); td.innerHTML = "Noviembre"; table_head_row.append(td);}
+        if (data.december.length > 0) { let td = document.createElement("th"); td.innerHTML = "Diciembre"; table_head_row.append(td);}
         // create tbody, create tr, and td for each category
             // table body row elements and add data attribute to each
         const table_body = document.createElement("tbody")
@@ -406,21 +531,24 @@ function general_summary() {
         let th_alquiler = document.createElement("th"); th_alquiler.innerHTML = "Alquiler"; table_body_row_alquiler.append(th_alquiler);
         let th_total = document.createElement("th"); th_total.innerHTML = "Total"; table_body_row_total.append(th_total);
         // get data for total per month (data.total_monthly[0].categ_sum) and add per all total months
-        if(data.total_monthly[0]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[0].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month);} 
-        if(data.total_monthly[1]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[1].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month);} 
-        if(data.total_monthly[2]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[2].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
-        if(data.total_monthly[3]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[3].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
-        if(data.total_monthly[4]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[4].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
-        if(data.total_monthly[5]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[5].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
-        if(data.total_monthly[6]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[6].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
-        if(data.total_monthly[7]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[7].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
-        if(data.total_monthly[8]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[8].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
-        if(data.total_monthly[9]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[9].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
-        if(data.total_monthly[10]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[10].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
-        if(data.total_monthly[11]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[11].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
-        if(data.total_monthly[12]) { let td_month = document.createElement("td");td_month.innerHTML = `${parseInt(data.total_monthly[12].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
+        if(data.total_monthly[0]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[0].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month);} 
+        if(data.total_monthly[1]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[1].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month);} 
+        if(data.total_monthly[2]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[2].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
+        if(data.total_monthly[3]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[3].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
+        if(data.total_monthly[4]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[4].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
+        if(data.total_monthly[5]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[5].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
+        if(data.total_monthly[6]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[6].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
+        if(data.total_monthly[7]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[7].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
+        if(data.total_monthly[8]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[8].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
+        if(data.total_monthly[9]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[9].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
+        if(data.total_monthly[10]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[10].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
+        if(data.total_monthly[11]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[11].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
+        if(data.total_monthly[12]) { let td_month = document.createElement("td"); td_month.className = "fw-bold"; td_month.innerHTML = `${parseInt(data.total_monthly[12].categ_sum).toFixed(0)}`;table_body_row_total.append(td_month)} 
         // check if data attribute is equal to category per month and create cell if it does exist
         data.january.forEach(item => {  
+            // check if there is data for january
+                // if (data.january.length) { }
+                console.log(item)
             if (item.category === parseInt(table_body_row_apps.dataset.category)) { let td_apps = document.createElement("td"); td_apps.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_apps.append(td_apps);}
             if (item.category === parseInt(table_body_row_servicios.dataset.category)) { let td_serv = document.createElement("td"); td_serv.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`; table_body_row_servicios.append(td_serv);}
             if (item.category === parseInt(table_body_row_otros.dataset.category)) { let td_otros = document.createElement("td");td_otros.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_otros.append(td_otros);}
@@ -554,7 +682,8 @@ function general_summary() {
             if (item.category === parseInt(table_body_row_alquiler.dataset.category)) { let td_alquiler = document.createElement("td");td_alquiler.innerHTML = `${parseInt(item.categ_sum).toFixed(0)}`;table_body_row_alquiler.append(td_alquiler);}
         })
         // main append to table of body elements
-        table.append(table_body, table_body_row_apps, table_body_row_servicios, table_body_row_otros, table_body_row_alimentos, table_body_row_suplementos, table_body_row_cuid_pers, table_body_row_seguros, table_body_row_limpieza, table_body_row_alquiler, table_body_row_total)
+        table_body.append(table_body_row_apps, table_body_row_servicios, table_body_row_otros, table_body_row_alimentos, table_body_row_suplementos, table_body_row_cuid_pers, table_body_row_seguros, table_body_row_limpieza, table_body_row_alquiler, table_body_row_total);
+        table.append(table_body)
     })
     .catch(error => console.log(error))
 }
@@ -617,7 +746,7 @@ function summary_month() {
         // Show title for selected month and year
         const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         const month_title = document.querySelector("#transaction-month")
-        month_title.innerHTML = `<h3>Año ${value_year} </br> Mes ${monthNames[value_month - 1]} </h3>`
+        month_title.innerHTML = `<h3 class='fw-bolder'>Año ${value_year}  Mes ${monthNames[value_month - 1]} </h3>`
         // if no data available stop
         if (data.summary.sum_cat.length === 0) {
             error.style.display = "block";
@@ -657,10 +786,10 @@ function summary_month() {
         // add row for total amount
         let total_result = parseInt(data.total_budget_month - data.total_month)
         let total_trow = document.createElement("tr")
-        total_trow.innerHTML = ` <td>Total</td>
-                                <td>${parseInt(data.total_month).toFixed(2)}</td>
-                                <td>${parseInt(data.total_budget_month)}</td>
-                                <td class="${parseInt(data.total_budget_month) >= parseInt(data.total_month) ? "table-success" : "table-danger"}">${total_result.toFixed(2)}</td>`
+        total_trow.innerHTML = ` <td class='fw-bold'>Total</td>
+                                <td class='fw-bold'>${parseInt(data.total_month).toFixed(2)}</td>
+                                <td class='fw-bold'>${parseInt(data.total_budget_month)}</td>
+                                <td class="${parseInt(data.total_budget_month) >= parseInt(data.total_month) ? "table-success fw-bold" : "table-danger fw-bold"}">${total_result.toFixed(2)}</td>`
         table_tbody.appendChild(total_trow)
     })
     .catch(error => console.log(error))
@@ -678,10 +807,16 @@ function load_transactions(month, year) {
     fetch(`/load_transactions/date?month=${month ? month : value_month}&year=${year ? year : value_year}`)
         .then(response => response.json())
         .then(data => { 
+            console.log(month, value_month, year, value_year);
             // Show title for selected month and year
             const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             const month_title = document.querySelector("#transaction-month")
-            month_title.innerHTML = `<h3>Año ${year ? year : value_year} </br> Mes ${month ? monthNames[month -1] : monthNames[value_month - 1]} </h3>`
+            month_title.innerHTML = `<h3 class='fw-bolder'>Año ${year ? year : value_year}  Mes ${month ? monthNames[month -1] : monthNames[value_month - 1]} </h3>`
+            // prepopulate date form with month,year and day
+            if (value_month < 10) {value_month = "0" + value_month;}
+            if (month < 10) { month = "0" + month;}
+            let format_date = (value_year ? value_year : year) + '-' + (value_month ? value_month : month) + '-' + "01";
+            document.querySelector("#transaction-date").value = format_date;
             // check if there is data for selected month and year
             if (data.transaction.length === 0) {
                 error.style.display = "block";
@@ -691,7 +826,6 @@ function load_transactions(month, year) {
             // creation of thead and tbody (1 of a kind elements)
             let table_thead = document.createElement("thead");
             table_thead.innerHTML = `<tr>
-                                        <th scope="col">#</th>
                                         <th scope="col">Dia</th>
                                         <th scope="col">Categoria</th>
                                         <th scope="col">Descripción</th>
@@ -708,8 +842,7 @@ function load_transactions(month, year) {
                 // creation of each element of the table
                 let table_tbody_trow = document.createElement("tr");
                 table_tbody_trow.setAttribute('id', `selected${transaction.id}`);
-                table_tbody_trow.innerHTML = `  <th scope="row">${transaction.id}</th>
-                                                <td id='day${transaction.id}'>${day}</td>
+                table_tbody_trow.innerHTML = `  <td id='day${transaction.id}'>${day}</td>
                                                 <td id='category${transaction.id}'>${transaction.category}</td>
                                                 <td id='description${transaction.id}'>${transaction.description}</td>
                                                 <td id='amount${transaction.id}'>${transaction.amount}</td>
@@ -745,7 +878,7 @@ function load_transactions(month, year) {
                         })
                         .catch(error => console.log(error))
                     }
-                // update when clicking actualizar button - post method 
+                // update when clicking actualizar button - put method 
                 document.querySelector("#update-button").onclick = function(event) {
                     event.preventDefault();
                     updateTransaction(transaction.id)
@@ -765,7 +898,7 @@ function updateTransaction(id) {
     const update_amount = document.querySelector("#update-amount").value
     // get csrf token from django template {% csrf_token %}
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    // make post to backend
+    // make put to backend
     fetch(`/update_transaction/${id}`, {
         method: 'PUT',
         headers: {
@@ -782,8 +915,6 @@ function updateTransaction(id) {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
-            //load_transactions(data.month, data.year)
             // select row id and update inner html elements (date, category, description, amount, input) example id date${id}
             document.querySelector(`#day${data.transaction.id}`).innerHTML = data.day
             document.querySelector(`#category${data.transaction.id}`).innerHTML = data.transaction.category

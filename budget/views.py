@@ -30,6 +30,27 @@ def index(request):
         return render(request, "budget/index.html", {"profile" : Profile.objects.get(user=request.user)})
     return render(request, "budget/index.html")
 
+def update_budget(request, id):
+    template_budget = Budget.objects.get(user=request.user, id=id)
+    selected_budget = Budget.objects.filter(user=request.user, id=id)
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        amount = data.get("amount")
+        selected_budget.update(amount=amount, input_date=datetime.now())
+        result_budget = Budget.objects.get(user=request.user, id=id)
+        total_budget = Budget.objects.filter(user=request.user).aggregate(total_sum=Round(Sum('amount'),2))
+        return JsonResponse({"message": "Budget updated successfully", "result_budget": result_budget.serialize_budget(), "new_total_budget": total_budget["total_sum"]})
+    return JsonResponse({"category": template_budget.category.category, "amount": template_budget.amount})
+
+def delete_budget(request, id):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        budget_id = data.get("budget_id")
+        selected_category = Budget.objects.get(user=request.user, id=budget_id)
+        selected_category.delete()
+        total_budget = Budget.objects.filter(user=request.user).aggregate(total_sum=Round(Sum('amount'),2))
+        return JsonResponse({"message": "Category budget deleted sucessfully", "category": selected_category.category.category, "new_total_budget": total_budget["total_sum"]})
+
 def add_budget(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -78,7 +99,6 @@ def new_transaction(request):
     if request.method == "POST":
         # recolect data from form
         data = json.loads(request.body)
-        print(data)
         # add data for date, category, transaction and amount
         newTransaction = Transactions(user=request.user, date=data["date"], category_id=int(data["category"]), description=data["description"], amount=data["amount"])
         newTransaction.save()
@@ -88,7 +108,6 @@ def new_transaction(request):
 
 def general_summary(request, date):
     year = int(request.GET['year'])
-    print(year)
     sum_category = list(Transactions.objects.filter(user=request.user, date__year=year).values('category').annotate(categ_sum=Round(Sum('amount'),2)))
     category_dict = {}
     categories = Categories.objects.all()
