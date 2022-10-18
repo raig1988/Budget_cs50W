@@ -41,7 +41,41 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # django all auth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'allauth.socialaccount.providers.google', #for google auth
 ]
+
+# Django all auth
+AUTHENTICATION_BACKENDS = (
+ #used for default signin such as loggin into admin panel
+ 'django.contrib.auth.backends.ModelBackend',
+ #used for social authentications
+ 'allauth.account.auth_backends.AuthenticationBackend',
+ )
+
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/login'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+# end django auth
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

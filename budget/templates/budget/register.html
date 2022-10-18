@@ -1,4 +1,5 @@
 {% extends "budget/layout.html" %}
+{% load socialaccount %}
 {% load static %}
 
 {% block title %}Registro{% endblock %}
@@ -28,6 +29,9 @@
             </div>
             <input class="btn btn-primary" type="submit" value="Registro">
         </form>
+        <!--<div class="row signin mt-3">
+            <a href="{% provider_login_url 'google' %}" class="text-dark"><img src="{% static '/budget/images/btn_google_signin_light_normal_web@2x.png' %}" style="width:14rem; height:auto"></a>
+        </div> -->
         <div class="my-3">
             ¿Ya tienes una cuenta? <a href="{% url 'login' %}">Conectate aquí.</a>
         </div>

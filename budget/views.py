@@ -244,7 +244,7 @@ def register(request):
             return render(request, "budget/register.html", {
                 "message": "Nombre de usuario ya esta en uso."
             })
-        login(request, user)
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "budget/register.html")
